@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 const UserListContainer = styled.div`
   display: flex;
+  overflow: scroll;
   flex-direction: column;
 `;
 
