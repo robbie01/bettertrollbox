@@ -32,8 +32,8 @@ const MessagesList = ({ messages }) => (
        <PaddedText>{moment.unix(msg.date).format('hh:mm A')}</PaddedText>
        {msg.type === 'changed nick' ? (
          <React.Fragment>
-           <User color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</User>
-           {' is now '}
+           <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
+           <PaddedText>is now</PaddedText>
            <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
          </React.Fragment>
        ) : (

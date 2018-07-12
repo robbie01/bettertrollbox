@@ -13,7 +13,7 @@ export const updateUsers = createAction('update users', users =>
 export const userJoined = createAction('user joined', payload => ({ ...payload, date: moment().unix() }))
 export const userLeft = createAction('user left', payload => ({ ...payload, date: moment().unix() }))
 export const userChangedNick = createAction('user changed nick', (oldUser, newUser) => ({ oldUser, newUser, date: moment().unix() }))
-export const messageReceived = createAction('message received')
+export const messageReceived = createAction('message received', payload => ({ ...payload, date: moment(payload.date).unix() }))
 
 // commands
 export const changeNick = createAction('change nick')
