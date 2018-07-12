@@ -6,7 +6,7 @@ import User from './User';
 import { unescapeText } from '../utils';
 
 const MessagesListContainer = styled.div`
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -21,6 +21,16 @@ const PaddedText = styled.span`
   padding-right: 5px;
 `;
 
+const Timestamp = styled(PaddedText)`
+  flex 0 0 auto;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  overflow: hidden;
+  text-align: right;
+  vertical-align: text-bottom;
+  width: 65px;
+`;
+
 const PaddedUser = styled(User)`
   padding-right: 5px;
 `;
@@ -29,7 +39,7 @@ const MessagesList = ({ messages }) => (
   <MessagesListContainer>
     {messages.map((msg, i) => (
       <Message key={i}>
-       <PaddedText>{moment.unix(msg.date).format('hh:mm A')}</PaddedText>
+       <Timestamp>{moment.unix(msg.date).format('hh:mm A')}</Timestamp>
        {msg.type === 'changed nick' ? (
          <React.Fragment>
            <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>

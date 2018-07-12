@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import crown from '../resources/crown.svg';
 import User from './User';
 import { unescapeText } from '../utils';
 
@@ -11,10 +12,15 @@ const UserListContainer = styled.div`
   flex-direction: column;
 `;
 
+const UserListMember = styled(User)`
+  display: flex;
+  align-items: center;
+`;
+
 const UserList = ({ users }) => (
   <UserListContainer>
-    {users.map(({ nick, color, key }) => (
-      <User color={color} key={key}>{unescapeText(nick)}</User>
+    {users.map(({ nick, color, key }, i) => (
+      <UserListMember color={color} key={key}>{unescapeText(nick)}{i === 0 ? (<img src={crown} alt="King" />) : null}</UserListMember>
     ))}
   </UserListContainer>
 );
