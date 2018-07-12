@@ -1,4 +1,5 @@
-import { select, takeEvery, put, call, eventChannel } from 'redux-saga/effects';
+import { select, takeEvery, put, call } from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
 import {
   updateUsers,
@@ -24,11 +25,11 @@ const createSocket = () => new Promise((resolve, reject) => {
 });
 
 const subscribe = sock => eventChannel(emit => {
-  sock.on('update users', users => emit(updateUsers(Object.values(users))))
+  sock.on('update users', users => emit(updateUsers(users)))
   sock.on('user joined', user => emit(userJoined(user)))
   sock.on('user left', user => emit(userLeft(user)))
   sock.on('user change nick', (oldUser, newUser) => emit(userChangedNick(oldUser, newUser)))
-  sock.on('message received', msg => emit(messageReceived(msg)))
+  sock.on('message', msg => emit(messageReceived(msg)))
   return () => {
     sock.close();
   };
@@ -39,13 +40,14 @@ export default function* () {
   yield takeEvery(subscribe(sock), function* (action) {
     yield put(action);
   });
-  yield takeEvery(changeNick, function* (action) {
-    yield call(sock.emit, 'user joined', action.payload, yield select(getColor));
+  yield takeEvery(changeNick.getType(), function* (action) {
+    yield call(sock.emit.bind(sock), 'user joined', action.payload, yield select(getColor));
   });
-  yield takeEvery(changeColor, function* (action) {
-    yield call(sock.emit, 'user joined', yield select(getNick), action.payload);
+  yield takeEvery(changeColor.getType(), function* (action) {
+    yield call(sock.emit.bind(sock), 'user joined', yield select(getNick), action.payload);
   });
-  yield takeEvery(sendMessage, function* (action) {
-    yield call(sock.emit, 'message', action.payload);
+  yield takeEvery(sendMessage.getType(), function* (action) {
+    yield call(sock.emit.bind(sock), 'message', action.payload);
   });
+  yield call(sock.emit.bind(sock), 'user joined', yield select(getNick), yield select(getColor));
 };

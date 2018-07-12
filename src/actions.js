@@ -1,7 +1,12 @@
 import { createAction } from 'redux-act';
 
 // users
-export const updateUsers = createAction('update users')
+export const updateUsers = createAction('update users', users =>
+  Object.entries(users).map(([key, user]) => ({
+    ...user,
+    key
+  }))
+)
 
 // messages
 export const userJoined = createAction('user joined')

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { unescapeText } from '../utils';
 
 const UserListContainer = styled.div`
   display: flex;
@@ -16,9 +17,9 @@ const UserListMember = styled.div.attrs({
 
 const UserList = ({ users }) => (
   <UserListContainer>
-    {users.map(({ nick, color }) => (
-      <UserListMember color={color}>{nick}</UserListMember>
-    )}
+    {users.map(({ nick, color, key }) => (
+      <UserListMember color={color} key={key}>{unescapeText(nick)}</UserListMember>
+    ))}
   </UserListContainer>
 );
 

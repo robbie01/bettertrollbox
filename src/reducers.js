@@ -1,5 +1,5 @@
-import 'createReducer' from 'redux-act';
-import 'combineReducers' from 'redux';
+import { createReducer } from 'redux-act';
+import { combineReducers } from 'redux';
 
 import {
   updateUsers,
@@ -12,24 +12,24 @@ import {
 } from './actions';
 
 const users = createReducer({
-  [updateUsers]: (state, action) => action.payload
+  [updateUsers]: (state, payload) => payload
 }, []);
 
 const messages = createReducer({
-  [userJoined]: (state, action) => [ ...state, action ],
-  [userLeft]: (state, action) => [ ...state, action ],
-  [userChangedNick]: (state, action) => [ ...state, action ],
-  [messageReceived]: (state, action) => [ ...state, action ]
+  [userJoined]: (state, payload) => [ ...state, { ...payload, type: 'joined' } ],
+  [userLeft]: (state, payload) => [ ...state, { ...payload, type: 'left' } ],
+  [userChangedNick]: (state, payload) => [ ...state, { ...payload, type: 'changed nick' } ],
+  [messageReceived]: (state, payload) => [ ...state, { ...payload, type: 'message' } ]
 }, []);
 
 const user = createReducer({
-  [changeNick]: (state, action) => ({
+  [changeNick]: (state, payload) => ({
     ...state,
-    nick: action.payload
+    nick: payload
   }),
-  [changeColor]: (state, action) => ({
+  [changeColor]: (state, payload) => ({
     ...state,
-    color: action.payload
+    color: payload
   })
 }, {
   nick: 'anonymous',
