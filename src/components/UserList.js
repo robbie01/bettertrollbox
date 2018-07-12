@@ -5,8 +5,9 @@ import User from './User';
 import { unescapeText } from '../utils';
 
 const UserListContainer = styled.div`
+  min-width: 240px;
   display: flex;
-  overflow: scroll;
+  overflow-y: scroll;
   flex-direction: column;
 `;
 

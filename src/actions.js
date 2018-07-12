@@ -1,4 +1,5 @@
 import { createAction } from 'redux-act';
+import moment from 'moment';
 
 // users
 export const updateUsers = createAction('update users', users =>
@@ -9,9 +10,9 @@ export const updateUsers = createAction('update users', users =>
 )
 
 // messages
-export const userJoined = createAction('user joined')
-export const userLeft = createAction('user left')
-export const userChangedNick = createAction('user changed nick', (oldUser, newUser) => ({ oldUser, newUser }))
+export const userJoined = createAction('user joined', payload => ({ ...payload, date: moment().unix() }))
+export const userLeft = createAction('user left', payload => ({ ...payload, date: moment().unix() }))
+export const userChangedNick = createAction('user changed nick', (oldUser, newUser) => ({ oldUser, newUser, date: moment().unix() }))
 export const messageReceived = createAction('message received')
 
 // commands
