@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import moment from 'moment';
 import User from './User';
 import { unescapeText } from '../utils';
 
@@ -39,7 +38,7 @@ const MessagesList = ({ messages }) => (
   <MessagesListContainer>
     {messages.map((msg, i) => (
       <Message key={i}>
-       <Timestamp>{moment.unix(msg.date).format('hh:mm A')}</Timestamp>
+       <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
        {msg.type === 'changed nick' ? (
          <React.Fragment>
            <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
@@ -49,7 +48,7 @@ const MessagesList = ({ messages }) => (
        ) : (
          <React.Fragment>
            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
-           <span>{msg.type === 'message' ? msg.msg : msg.type}</span>
+           <span>{msg.type === 'message' ? unescapeText(msg.msg) : msg.type}</span>
          </React.Fragment>
        )}
       </Message>
