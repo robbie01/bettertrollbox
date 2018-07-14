@@ -92,7 +92,7 @@ const MessagesList = ({ messages }) => (
           <React.Fragment>
             <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
             <MessageText>
-              {unescapeText(msg.msg).split('\n').map((e, i) => (
+              {unescapeText(msg.msg).replace(/\n$/, '').split('\n').map((e, i) => (
                 <React.Fragment key={i}>
                   {e}<br />
                 </React.Fragment>
