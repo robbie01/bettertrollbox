@@ -2,17 +2,42 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import User from './User';
+import AutoScroller from './AutoScroller';
 import { unescapeText } from '../utils';
 
-const MessagesListContainer = styled.div`
+const MessagesScroller = styled.div`
+  &::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  &::-webkit-scrollbar-thumb, &::-webkit-scrollbar-track-piece {
+    background-clip: padding-box;
+    border: 3px solid;
+    border-radius: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-color: #36393f;
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    background-color: #2f3136;
+    border-color: #36393f;    
+  }
+`;
+
+const MessagesListContainer = styled(AutoScroller(MessagesScroller))`
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
   overflow-y: auto;
   background: #36393f;
 `;
 
 const Message = styled.div`
+  flex: 0 0 auto;
   display: flex;
   flex-direction: row;
 `;

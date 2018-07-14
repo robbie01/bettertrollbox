@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "moment": "^2.22.2",
+    "normalize.css": "^8.0.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
