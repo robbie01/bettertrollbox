@@ -8,8 +8,9 @@ import { unescapeText } from '../utils';
 const UserListContainer = styled.div`
   min-width: 240px;
   display: flex;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-direction: column;
+  background: #2f3136;
 `;
 
 const UserListMember = styled(User)`
