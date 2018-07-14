@@ -60,7 +60,7 @@ const Timestamp = styled(PaddedText)`
   text-align: right;
   vertical-align: text-bottom;
   width: 65px;
-  color: hsla(0,0%,100%,.2);
+  color: ${({ first }) => first ? `hsla(0,0%,100%,.2)` : `transparent`};
 
   ${Message}:hover & {
     color: #99aab5;
@@ -75,7 +75,7 @@ const MessagesList = ({ messages }) => (
   <MessagesListContainer>
     {messages.map((msg, i) => (
       <Message key={i}>
-       <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
+       <Timestamp first>{msg.date.format('hh:mm A')}</Timestamp>
        {msg.type === 'changed nick' ? (
          <React.Fragment>
            <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
