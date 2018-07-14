@@ -9,7 +9,7 @@ const AppContainer = styled.div`
   flex-direction: row;
   align-items: stretch;
   color: white;
-  font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-family: Whitney,'Open Sans',Helvetica Neue,Helvetica,Arial,sans-serif;
 `;
 
 const App = () => (

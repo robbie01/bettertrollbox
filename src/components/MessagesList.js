@@ -37,9 +37,15 @@ const MessagesListContainer = styled(AutoScroller(MessagesScroller))`
 `;
 
 const Message = styled.div`
+  margin: 0 6px 0 20px;
+  padding: 9px 0;
+  border-bottom: 1px solid;
+  border-bottom-color: hsla(0,0%,100%,.04);
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
+  align-items: flex-end;
+  color: hsla(0,0%,100%,.7);
 `;
 
 const PaddedText = styled.span`
@@ -54,6 +60,11 @@ const Timestamp = styled(PaddedText)`
   text-align: right;
   vertical-align: text-bottom;
   width: 65px;
+  color: hsla(0,0%,100%,.2);
+
+  ${Message}:hover & {
+    color: #99aab5;
+  }
 `;
 
 const PaddedUser = styled(User)`

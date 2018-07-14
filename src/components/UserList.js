@@ -16,9 +16,11 @@ const UserListContainer = styled.div`
 `;
 
 const UserListMember = styled(User)`
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 16px;
   padding: 8px;
   border-radius: 3px;
   margin: 1px 8px;
