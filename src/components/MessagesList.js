@@ -44,8 +44,10 @@ const Message = styled.div`
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: baseline
   color: hsla(0,0%,100%,.7);
+  font-size: 0.9375rem;
+  word-break: break-word;
 `;
 
 const PaddedText = styled.span`
@@ -71,23 +73,38 @@ const PaddedUser = styled(User)`
   padding-right: 5px;
 `;
 
+const MessageText = styled.span`
+  font-family: 'Ubuntu Mono', monospace;
+`;
+
 const MessagesList = ({ messages }) => (
   <MessagesListContainer>
     {messages.map((msg, i) => (
       <Message key={i}>
-       <Timestamp first>{msg.date.format('hh:mm A')}</Timestamp>
-       {msg.type === 'changed nick' ? (
-         <React.Fragment>
-           <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
-           <PaddedText>is now</PaddedText>
-           <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
-         </React.Fragment>
-       ) : (
-         <React.Fragment>
-           <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
-           <span>{msg.type === 'message' ? unescapeText(msg.msg) : msg.type}</span>
-         </React.Fragment>
-       )}
+        <Timestamp first>{msg.date.format('hh:mm A')}</Timestamp>
+        {msg.type === 'changed nick' ? (
+          <React.Fragment>
+            <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
+            <PaddedText>is now</PaddedText>
+            <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
+          </React.Fragment>
+        ) : msg.type === 'message' ? (
+          <React.Fragment>
+            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
+            <MessageText>
+              {unescapeText(msg.msg).split('\n').map((e, i) => (
+                <React.Fragment key={i}>
+                  {e}<br />
+                </React.Fragment>
+              ))}
+            </MessageText>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
+            <span>{msg.type}</span>
+          </React.Fragment>
+        )}
       </Message>
     ))}
   </MessagesListContainer>
