@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import User from './User';
-import AutoScroller from './AutoScroller';
+import autoScroller from './AutoScroller';
 import { unescapeText } from '../utils';
 
 const MessagesScroller = styled.div`
@@ -27,13 +27,13 @@ const MessagesScroller = styled.div`
   }
 `;
 
-const MessagesListContainer = styled(AutoScroller(MessagesScroller))`
-  flex: 1 1 auto;
+const MessagesListContainer = styled(autoScroller(MessagesScroller))`
+  height: 100%;
+  flex: 0 1 100%;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  overflow-y: auto;
-  background: #36393f;
+  overflow-y: scroll;
 `;
 
 const Message = styled.div`
@@ -47,7 +47,10 @@ const Message = styled.div`
   align-items: baseline
   color: hsla(0,0%,100%,.7);
   font-size: 0.9375rem;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  hyphens: auto;
 `;
 
 const PaddedText = styled.span`

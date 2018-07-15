@@ -6,7 +6,8 @@ import User from './User';
 import { unescapeText } from '../utils';
 
 const UserListContainer = styled.div`
-  min-width: 240px;
+  flex: 0 0 auto;
+  width: 240px;
   display: flex;
   overflow-x: hidden;
   overflow-y: auto;
@@ -15,7 +16,8 @@ const UserListContainer = styled.div`
   padding: 8px 0;
 `;
 
-const UserListMember = styled(User)`
+const UserListMember = styled.div`
+  display: flex;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -30,6 +32,11 @@ const UserListMember = styled(User)`
   }
 `;
 
+const ULMUser = styled(User)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 const UserListCrown = styled.img.attrs({
   src: crown,
   width: 14,
@@ -42,7 +49,7 @@ const UserListCrown = styled.img.attrs({
 const UserList = ({ users }) => (
   <UserListContainer>
     {users.map(({ nick, color, key }, i) => (
-      <UserListMember color={color} key={key}>{unescapeText(nick)}{i === 0 ? (<UserListCrown />) : null}</UserListMember>
+      <UserListMember key={key}><ULMUser color={color}>{unescapeText(nick)}</ULMUser>{i === 0 ? (<UserListCrown />) : null}</UserListMember>
     ))}
   </UserListContainer>
 );

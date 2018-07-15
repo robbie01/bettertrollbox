@@ -1,38 +1,49 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 
-const AutoScroller = (Comp) => class extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      autoScroll: true
-    };
-    this.rootRef = React.createRef();
-    this.onManualScroll = this.onManualScroll.bind(this);
-  }
-
-  onManualScroll() {
-    const rootEl = this.rootRef.current;
-    this.setState({
-      autoScroll: rootEl.scrollTop > rootEl.scrollHeight - rootEl.clientHeight - 10
-    });
-  }
-
-  componentDidUpdate() {
-    if (this.state.autoScroll) {
-      this.userScroll = false;
-      const rootEl = this.rootRef.current;
-      rootEl.scrollTop = rootEl.scrollHeight;
-    }
-  }
-
-  render() {
-    const { children, ...props } = this.props;
-    return (
-      <Comp {...props} ref={this.rootRef} onWheel={() => this.userScroll = true}>
-        {children}
-      </Comp>
-    );
-  }
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 
-export default AutoScroller;
+const autoScroller = function autoScroller(Comp) {
+  class AutoScroller extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        autoScroll: true
+      };
+      this.rootRef = React.createRef();
+      this.onScroll = this.onScroll.bind(this);
+    }
+
+    onManualScroll() {
+      const rootEl = findDOMNode(this.rootRef.current);
+      this.setState({
+        autoScroll: rootEl.scrollTop > rootEl.scrollHeight - rootEl.clientHeight - 10
+      });
+    }
+
+    onScroll() {
+      if (this.userScroll) this.onManualScroll();
+    }
+
+    componentDidUpdate() {
+      if (this.state.autoScroll) {
+        this.userScroll = false;
+        const rootEl = findDOMNode(this.rootRef.current);
+        rootEl.scrollTop = rootEl.scrollHeight;
+        setTimeout(() => this.userScroll = true, 100);
+      }
+    }
+
+    render() {
+      return (
+        <Comp {...this.props} ref={this.rootRef} onScroll={this.onScroll} onWheel={() => this.userScroll = true} />
+      );
+    }
+  }
+  AutoScroller.displayName = `AutoScroller(${getDisplayName(Comp)})`;
+  return AutoScroller;
+}
+
+export default autoScroller;
