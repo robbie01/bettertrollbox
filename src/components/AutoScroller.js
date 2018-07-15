@@ -19,7 +19,7 @@ const autoScroller = function autoScroller(Comp) {
     onManualScroll() {
       const rootEl = findDOMNode(this.rootRef.current);
       this.setState({
-        autoScroll: rootEl.scrollTop > rootEl.scrollHeight - rootEl.clientHeight - 10
+        autoScroll: rootEl.scrollTop > rootEl.scrollHeight - rootEl.clientHeight - 5
       });
     }
 
