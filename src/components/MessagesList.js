@@ -44,7 +44,7 @@ const Message = styled.div`
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
-  align-items: baseline
+  align-items: baseline;
   color: hsla(0,0%,100%,.7);
   font-size: 0.9375rem;
   overflow-wrap: break-word;
@@ -58,7 +58,7 @@ const PaddedText = styled.span`
 `;
 
 const Timestamp = styled(PaddedText)`
-  flex 0 0 auto;
+  flex: 0 0 auto;
   font-size: 0.6875rem;
   line-height: 1rem;
   overflow: hidden;
