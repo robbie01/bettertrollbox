@@ -6,6 +6,7 @@ import autoScroller from './AutoScroller';
 import { unescapeText, unescapeText2 } from '../utils';
 
 import joined from '../resources/joined.svg';
+import left from '../resources/left.svg';
 
 const MessagesScroller = styled.div`
   &::-webkit-scrollbar {
@@ -123,6 +124,7 @@ const MessagesList = ({ messages }) => (
           </Message>
         ) : msg.type === 'left' ? (
           <Message center key={i}>
+            <Icon src={left} alt="Left" />
             <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser> left the Trollbox.
           </Message>
         ) : (

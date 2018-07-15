@@ -7,6 +7,7 @@ import UserList from './UserList';
 import Preloader from './Preloader';
 import crown from '../resources/crown.svg';
 import joined from '../resources/joined.svg';
+import left from '../resources/left.svg';
 
 const AppContainer = styled.div`
   height: 100%;
@@ -30,7 +31,8 @@ const App = () => (
   <AppContainer>
     <Preloader content={{
       [crown]: 'image',
-      [joined]: 'image'
+      [joined]: 'image',
+      [left]: 'image'
     }} />
     <LeftPane>
       <MessagesList />
