@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { sendMessage } from '../actions';
 
 const MessageFormContainer = styled.form`
   flex: 0 0 auto;
@@ -11,9 +12,10 @@ const MessageFormContainer = styled.form`
 
 const MessageFormTextarea = styled.textarea.attrs({
   style: ({ textRows }) => ({
-    height: `${Math.min(24+textRows*20, 220)}px`
+    height: `${Math.min(25+textRows*20, 220)}px`
   })
 })`
+  font-family: 'Ubuntu Mono', monospace;
   appearance: none;
   box-shadow: none;
   outline: none;
@@ -65,11 +67,22 @@ class MessageForm extends React.Component {
     };
     this.inputRef = React.createRef();
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
 
   onKeyDown(e) {
     if (!e.ctrlKey)
       this.inputRef.current.focus();
+    if (e.key === 'Enter' && !e.shiftKey)
+      e.preventDefault();
+  }
+
+  onKeyUp(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      this.props.onSubmit(e.target.value);
+      this.setState({ input: '' });
+    }
   }
 
   componentDidMount() {
@@ -82,8 +95,8 @@ class MessageForm extends React.Component {
 
   render() {
     return (
-      <MessageFormContainer onSubmit={() => { this.onSubmit(); return false; }}>
-        <MessageFormTextarea innerRef={this.inputRef} textRows={this.state.input.split('\n').length}
+      <MessageFormContainer onSubmit={() => false}>
+        <MessageFormTextarea onKeyUp={this.onKeyUp} innerRef={this.inputRef} textRows={this.state.input.split('\n').length}
           placeholder="Message" rows={1} value={this.state.input}
           onInput={e => this.setState({ input: e.target.value })} />
       </MessageFormContainer>
@@ -91,4 +104,8 @@ class MessageForm extends React.Component {
   }
 }
 
-export default connect()(MessageForm);
+const mapDispatchToProps = dispatch => ({
+  onSubmit: msg => dispatch(sendMessage(msg))
+});
+
+export default connect(() => ({}), mapDispatchToProps)(MessageForm);

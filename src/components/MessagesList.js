@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import User from './User';
 import autoScroller from './AutoScroller';
-import { unescapeText } from '../utils';
+import { unescapeText, unescapeText2 } from '../utils';
 
 import joined from '../resources/joined.svg';
 
@@ -114,13 +114,7 @@ const MessagesList = ({ messages }) => (
           <Message key={i}>
             <Timestamp><HighlightSep>[</HighlightSep>{msg.date.format('hh:mm A')}<HighlightSep>] </HighlightSep></Timestamp>
             <PaddedUser color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedUser>
-            <MessageText>
-              {unescapeText(msg.msg).replace(/\n$/, '').split('\n').map((e, i) => (
-                <React.Fragment key={i}>
-                  {e}<br />
-                </React.Fragment>
-              ))}
-            </MessageText>
+            <MessageText dangerouslySetInnerHTML={{__html: unescapeText2(msg.msg)}} />
           </Message>
         ) : msg.type === 'joined' ? (
           <Message center key={i}>

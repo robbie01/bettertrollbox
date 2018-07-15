@@ -12,9 +12,6 @@ import registerServiceWorker from './registerServiceWorker';
 import 'normalize.css';
 
 injectGlobal`
-  @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
-  @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
-
   html {
     font-size: 100%;
   }
