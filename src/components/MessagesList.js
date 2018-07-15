@@ -49,10 +49,6 @@ const Message = styled.div`
   align-items: ${props => props.center ? 'center' : 'baseline'};
   color: hsla(0,0%,100%,.7);
   font-size: 0.9375rem;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-all;
-  hyphens: auto;
 `;
 
 const PaddedText = styled.span`
@@ -64,8 +60,7 @@ const Timestamp = styled(PaddedText)`
   font-size: 0.6875rem;
   line-height: 1rem;
   overflow: hidden;
-  text-align: right;
-  vertical-align: text-bottom;
+  text-align: right;  
   width: 65px;
   color: hsla(0,0%,100%,.2);
 
@@ -79,8 +74,6 @@ const AuthorUser = styled(User)`
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
-  overflow-wrap: normal;
-  word-break: keep-all;
 `;
 
 const PaddedUser = styled(AuthorUser)`
@@ -89,6 +82,15 @@ const PaddedUser = styled(AuthorUser)`
 
 const MessageText = styled.span`
   font-family: 'Ubuntu Mono', monospace;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  hyphens: auto;
+`;
+
+const HighlightSep = styled.span`
+  opacity: 0;
+  width: 0;
 `;
 
 const Icon = styled.img.attrs({
@@ -103,15 +105,15 @@ const MessagesList = ({ messages }) => (
     {messages.map((msg, i) =>
         msg.type === 'changed nick' ? (
           <Message key={i}>
-            <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
-            <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
-            <PaddedText>is now</PaddedText>
+            <Timestamp>{msg.date.format('hh:mm A')} </Timestamp>
+            <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)} </PaddedUser>
+            <PaddedText>is now </PaddedText>
             <AuthorUser color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</AuthorUser>
           </Message>
         ) : msg.type === 'message' ? (
           <Message key={i}>
-            <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
-            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
+            <Timestamp><HighlightSep>[</HighlightSep>{msg.date.format('hh:mm A')}<HighlightSep>] </HighlightSep></Timestamp>
+            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedUser>
             <MessageText>
               {unescapeText(msg.msg).replace(/\n$/, '').split('\n').map((e, i) => (
                 <React.Fragment key={i}>
@@ -131,7 +133,7 @@ const MessagesList = ({ messages }) => (
           </Message>
         ) : (
           <Message key={i}>
-            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
+            <PaddedUser color={msg.color}>{unescapeText(msg.nick)} </PaddedUser>
             <span>{msg.type}</span>
           </Message>
         )
