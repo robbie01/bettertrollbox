@@ -4,6 +4,10 @@ import MessagesList from './MessagesList';
 import MessageForm from './MessageForm';
 import UserList from './UserList';
 
+import Preloader from './Preloader';
+import crown from '../resources/crown.svg';
+import joined from '../resources/joined.svg';
+
 const AppContainer = styled.div`
   height: 100%;
   width: 100%;
@@ -24,6 +28,10 @@ const LeftPane = styled.div`
 
 const App = () => (
   <AppContainer>
+    <Preloader content={{
+      [crown]: 'image',
+      [joined]: 'image'
+    }} />
     <LeftPane>
       <MessagesList />
       <MessageForm />
