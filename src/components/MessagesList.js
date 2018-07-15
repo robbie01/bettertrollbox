@@ -74,7 +74,16 @@ const Timestamp = styled(PaddedText)`
   }
 `;
 
-const PaddedUser = styled(User)`
+const AuthorUser = styled(User)`
+  flex: 0 0 auto;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: normal;
+  word-break: keep-all;
+`;
+
+const PaddedUser = styled(AuthorUser)`
   padding-right: 5px;
 `;
 
@@ -97,7 +106,7 @@ const MessagesList = ({ messages }) => (
             <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
             <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
             <PaddedText>is now</PaddedText>
-            <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
+            <AuthorUser color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</AuthorUser>
           </Message>
         ) : msg.type === 'message' ? (
           <Message key={i}>
