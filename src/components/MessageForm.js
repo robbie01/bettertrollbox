@@ -11,7 +11,7 @@ const MessageFormContainer = styled.form`
 
 const MessageFormTextarea = styled.textarea.attrs({
   style: ({ textRows }) => ({
-    height: `${24+textRows*20}px`
+    height: `${Math.min(24+textRows*20, 220)}px`
   })
 })`
   appearance: none;
@@ -26,12 +26,35 @@ const MessageFormTextarea = styled.textarea.attrs({
   letter-spacing: -0.025rem;
   line-height: 1.25rem;
   resize: none;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   word-break: break-all;
   word-wrap: break-word;
   border: 0;
   border-radius: 5px;
   background-color: hsla(218,5%,47%,.3);
+
+  &::-webkit-scrollbar {
+    margin-right: 2px;
+    height: 4px;
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    border: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(32,34,37,.6);
+    border-radius: 2px;
+    cursor: move;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: none;
+    border: none;
+  }
 `;
 
 class MessageForm extends React.Component {
