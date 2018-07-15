@@ -5,6 +5,8 @@ import User from './User';
 import autoScroller from './AutoScroller';
 import { unescapeText } from '../utils';
 
+import joined from '../resources/joined.svg';
+
 const MessagesScroller = styled.div`
   &::-webkit-scrollbar {
     width: 14px;
@@ -44,7 +46,7 @@ const Message = styled.div`
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  align-items: ${props => props.center ? 'center' : 'baseline'};
   color: hsla(0,0%,100%,.7);
   font-size: 0.9375rem;
   overflow-wrap: break-word;
@@ -80,19 +82,26 @@ const MessageText = styled.span`
   font-family: 'Ubuntu Mono', monospace;
 `;
 
+const Icon = styled.img.attrs({
+  width: 16,
+  height: 16
+})`
+  margin-right: 8px;
+`;
+
 const MessagesList = ({ messages }) => (
   <MessagesListContainer>
-    {messages.map((msg, i) => (
-      <Message key={i}>
-        <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
-        {msg.type === 'changed nick' ? (
-          <React.Fragment>
+    {messages.map((msg, i) =>
+        msg.type === 'changed nick' ? (
+          <Message key={i}>
+            <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
             <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)}</PaddedUser>
             <PaddedText>is now</PaddedText>
             <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
-          </React.Fragment>
+          </Message>
         ) : msg.type === 'message' ? (
-          <React.Fragment>
+          <Message key={i}>
+            <Timestamp>{msg.date.format('hh:mm A')}</Timestamp>
             <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
             <MessageText>
               {unescapeText(msg.msg).replace(/\n$/, '').split('\n').map((e, i) => (
@@ -101,15 +110,23 @@ const MessagesList = ({ messages }) => (
                 </React.Fragment>
               ))}
             </MessageText>
-          </React.Fragment>
+          </Message>
+        ) : msg.type === 'joined' ? (
+          <Message center key={i}>
+            <Icon src={joined} alt="Joined" />
+            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser> joined the Trollbox.
+          </Message>
+        ) : msg.type === 'left' ? (
+          <Message center key={i}>
+            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser> left the Trollbox.
+          </Message>
         ) : (
-          <React.Fragment>
+          <Message key={i}>
             <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser>
             <span>{msg.type}</span>
-          </React.Fragment>
-        )}
-      </Message>
-    ))}
+          </Message>
+        )
+    )}
   </MessagesListContainer>
 );
 
