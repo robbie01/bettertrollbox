@@ -24,12 +24,12 @@ const createSocket = () => new Promise((resolve, reject) => {
   });
 });
 
-const subscribe = sock => eventChannel(emit => {
-  sock.on('update users', users => emit(updateUsers(users)))
-  sock.on('user joined', user => emit(userJoined(user)))
-  sock.on('user left', user => { if (user.nick) emit(userLeft(user)) })
-  sock.on('user change nick', (oldUser, newUser) => emit(userChangedNick(oldUser, newUser)))
-  sock.on('message', msg => emit(messageReceived(msg)))
+const subscribe = sock => eventChannel(put => {
+  sock.on('update users', users => put(updateUsers(users)))
+  sock.on('user joined', user => put(userJoined(user)))
+  sock.on('user left', user => { if (user.nick) put(userLeft(user)) })
+  sock.on('user change nick', (oldUser, newUser) => put(userChangedNick(oldUser, newUser)))
+  sock.on('message', msg => put(messageReceived(msg)))
   return () => {
     sock.close();
   };
