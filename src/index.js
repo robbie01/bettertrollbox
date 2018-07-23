@@ -1,12 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import createSagaMiddleware from 'redux-saga';
-import rootReducer from './reducers';
-import rootSaga from './sagas';
-import App from './components/App';
 import { injectGlobal } from 'styled-components';
+import Root from './components/Root';
 import registerServiceWorker from './registerServiceWorker';
 
 import 'normalize.css';
@@ -21,20 +16,8 @@ injectGlobal`
   }
 `;
 
-const sagaMiddleware = createSagaMiddleware();
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  rootReducer,
-  composeEnhancers(
-    applyMiddleware(sagaMiddleware)
-  )
-);
-sagaMiddleware.run(rootSaga)
-
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Root />,
   document.getElementById('root')
 );
 registerServiceWorker();

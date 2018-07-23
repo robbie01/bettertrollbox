@@ -37,17 +37,18 @@ const subscribe = sock => eventChannel(emit => {
 
 export default function* () {
   const sock = yield createSocket();
+  const emit = sock.emit.bind(sock);
   yield takeEvery(subscribe(sock), function* (action) {
     yield put(action);
   });
   yield takeEvery(changeNick.getType(), function* (action) {
-    yield call(sock.emit.bind(sock), 'user joined', action.payload, yield select(getColor));
+    yield call(emit, 'user joined', action.payload, yield select(getColor));
   });
   yield takeEvery(changeColor.getType(), function* (action) {
-    yield call(sock.emit.bind(sock), 'user joined', yield select(getNick), action.payload);
+    yield call(emit, 'user joined', yield select(getNick), action.payload);
   });
   yield takeEvery(sendMessage.getType(), function* (action) {
-    yield call(sock.emit.bind(sock), 'message', action.payload);
+    yield call(emit, 'message', action.payload);
   });
-  yield call(sock.emit.bind(sock), 'user joined', yield select(getNick), yield select(getColor));
+  yield call(emit, 'user joined', yield select(getNick), yield select(getColor));
 };
