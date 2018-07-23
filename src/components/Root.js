@@ -6,14 +6,27 @@ import rootReducer from '../reducers';
 import rootSaga from '../sagas';
 import App from './App';
 
+let initialUser;
+try {
+  initialUser = JSON.parse(localStorage.user);
+} catch (ex) {
+  // nothing
+}
+
 const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   rootReducer,
+  {
+    user: initialUser
+  },
   composeEnhancers(
     applyMiddleware(sagaMiddleware)
   )
 );
+store.subscribe(() => {
+  localStorage.user = JSON.stringify(store.getState().user);
+});
 sagaMiddleware.run(rootSaga);
 
 const Root = () => (
