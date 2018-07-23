@@ -8,7 +8,7 @@ import App from './App';
 
 let initialUser;
 try {
-  initialUser = JSON.parse(localStorage.user);
+  initialUser = JSON.parse(localStorage.getItem('user'));
 } catch (ex) {
   // nothing
 }
@@ -25,7 +25,7 @@ const store = createStore(
   )
 );
 store.subscribe(() => {
-  localStorage.user = JSON.stringify(store.getState().user);
+  localStorage.setItem('user', JSON.stringify(store.getState().user));
 });
 sagaMiddleware.run(rootSaga);
 

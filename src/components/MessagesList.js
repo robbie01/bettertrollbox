@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import moment from 'moment';
 import User from './User';
 import autoScroller from './AutoScroller';
 import { unescapeText, unescapeText2 } from '../utils';
@@ -106,14 +107,14 @@ const MessagesList = ({ messages }) => (
     {messages.map((msg, i) =>
         msg.type === 'changed nick' ? (
           <Message key={i}>
-            <Timestamp>{msg.date.format('hh:mm A')} </Timestamp>
+            <Timestamp>{moment(msg.date).format('hh:mm A')} </Timestamp>
             <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)} </PaddedUser>
             <PaddedText>is now </PaddedText>
             <AuthorUser color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</AuthorUser>
           </Message>
         ) : msg.type === 'message' ? (
           <Message key={i}>
-            <Timestamp><HighlightSep>[</HighlightSep>{msg.date.format('hh:mm A')}<HighlightSep>] </HighlightSep></Timestamp>
+            <Timestamp><HighlightSep>[</HighlightSep>{moment(msg.date).format('hh:mm A')}<HighlightSep>] </HighlightSep></Timestamp>
             <PaddedUser color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedUser>
             <MessageText dangerouslySetInnerHTML={{__html: unescapeText2(msg.msg)}} />
           </Message>
