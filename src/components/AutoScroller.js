@@ -5,7 +5,15 @@ const getDisplayName = function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 
-const autoScroller = function autoScroller(Comp) {
+const autoScroller = function autoScroller(InnerComponent) {
+  class Wrapper extends React.Component {
+    render() {
+      return (
+        <InnerComponent {...this.props} />
+      );
+    }
+  }
+
   class AutoScroller extends React.Component {
     constructor(props) {
       super(props);
@@ -38,11 +46,11 @@ const autoScroller = function autoScroller(Comp) {
 
     render() {
       return (
-        <Comp {...this.props} ref={this.rootRef} onScroll={this.onScroll} onWheel={() => this.userScroll = true} />
+        <Wrapper {...this.props} ref={this.rootRef} onScroll={this.onScroll} onWheel={() => this.userScroll = true} />
       );
     }
   }
-  AutoScroller.displayName = `AutoScroller(${getDisplayName(Comp)})`;
+  AutoScroller.displayName = `AutoScroller(${getDisplayName(InnerComponent)})`;
   return AutoScroller;
 }
 
