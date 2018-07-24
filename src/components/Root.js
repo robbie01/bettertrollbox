@@ -18,7 +18,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   rootReducer,
   {
-    user: initialUser
+    user: initialUser || undefined
   },
   composeEnhancers(
     applyMiddleware(sagaMiddleware)
