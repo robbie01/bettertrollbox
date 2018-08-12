@@ -1,6 +1,6 @@
 import { Observable, EMPTY } from 'rxjs';
 import { switchMap, tap, ignoreElements, pluck, distinctUntilChanged } from 'rxjs/operators';
-import { combineEpics } from 'redux-observable';
+import { combineEpics, ofType } from 'redux-observable';
 import {
   updateUsers,
   userJoined,
@@ -38,7 +38,8 @@ const socketUserEpic = (action$, state$, { sock$ }) =>
 const socketMessageEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
     switchMap(sock => sock == null ? EMPTY :
-      action$.ofType(sendMessage.getType()).pipe(
+      action$.pipe(
+        ofType(sendMessage.getType()),
         tap(({ payload }) => sock.emit('message', payload)),
         ignoreElements())));
 
