@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { first, filter, switchMap, tap, ignoreElements, pluck, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, EMPTY } from 'rxjs';
+import { switchMap, tap, ignoreElements, pluck, distinctUntilChanged } from 'rxjs/operators';
 import { combineEpics } from 'redux-observable';
 import {
   updateUsers,
@@ -12,8 +12,7 @@ import {
 
 const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
-    first(x => x != null),
-    switchMap(sock =>
+    switchMap(sock => sock == null ? EMPTY :
       new Observable(observer => {
         const next = observer.next.bind(observer)
         let evts = []
@@ -30,8 +29,7 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
 
 const socketUserEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
-    filter(x => x != null),
-    switchMap(sock =>
+    switchMap(sock => sock == null ? EMPTY :
       state$.pipe(
         pluck('user'),
         distinctUntilChanged((p, q) => p.nick === q.nick && p.color === q.color),
@@ -40,8 +38,7 @@ const socketUserEpic = (action$, state$, { sock$ }) =>
 
 const socketMessageEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
-    filter(x => x != null),
-    switchMap(sock =>
+    switchMap(sock => sock == null ? EMPTY :
       action$.ofType(sendMessage.getType()).pipe(
         tap(({ payload }) => sock.emit('message', payload)),
         ignoreElements())));
