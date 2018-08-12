@@ -75,6 +75,7 @@ const AuthorUser = styled(User)`
   flex: 0 0 auto;
   max-width: 200px;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 `;
 

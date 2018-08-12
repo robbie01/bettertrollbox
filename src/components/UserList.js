@@ -33,6 +33,7 @@ const UserListMember = styled.div`
   & ${User} {
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
