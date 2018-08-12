@@ -14,7 +14,6 @@ import {
 const socketConnectEpic = (action$, state$, { io, sock$ }) =>
   action$.pipe(
     ofType(connectSocket.getType()),
-    startWith(connectSocket()),
     pluck('payload'),
     switchMap(dest =>
       new Observable(o => {
@@ -26,7 +25,8 @@ const socketConnectEpic = (action$, state$, { io, sock$ }) =>
         };
       })),
     tap(sock$),
-    ignoreElements());
+    ignoreElements(),
+    startWith(connectSocket()));
 
 const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
