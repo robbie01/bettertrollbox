@@ -19,12 +19,14 @@ const socketConnectEpic = (action$, state$, { io, sock$ }) =>
     switchMap(dest =>
       new Observable(o => {
         const sock = io(dest);
-        sock.on('connect', () => sock$.next(sock));
-        sock.on('disconnect', () => sock$.next(null));
+        sock.on('connect', () => o.next(sock));
+        sock.on('disconnect', () => o.next(null));
         return () => {
           sock.close();
         };
-      })));
+      })),
+    tap(sock$),
+    ignoreElements());
 
 const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
