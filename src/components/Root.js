@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { BehaviorSubject } from 'rxjs';
 import { createEpicMiddleware } from 'redux-observable';
 import io from 'socket.io-client';
 import rootReducer from '../reducers';
@@ -14,8 +15,10 @@ try {
   // nothing
 }
 
+const sock$ = new BehaviorSubject(null);
+
 const epicMiddleware = createEpicMiddleware({
-  dependencies: { sock: io('//www.windows93.net:8081') }
+  dependencies: { sock$, localStorage }
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -27,10 +30,10 @@ const store = createStore(
     applyMiddleware(epicMiddleware)
   )
 );
-store.subscribe(() => {
-  localStorage.setItem('user', JSON.stringify(store.getState().user));
-});
+
 epicMiddleware.run(rootEpic);
+const sock = io('//www.windows93.net:8081');
+sock.on('connect', () => sock$.next(sock));
 
 const Root = () => (
   <Provider store={store}>
