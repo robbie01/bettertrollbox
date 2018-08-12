@@ -14,16 +14,16 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
     switchMap(sock => sock == null ? EMPTY :
       new Observable(o => {
-        let evts = []
-        const on = (evt, fn) => { sock.on(evt, fn); evts.push({ evt, fn }); }
-        on('update users', users => o.next(updateUsers(users)))
-        on('user joined', user => o.next(userJoined(user)))
-        on('user left', user => { if (user.nick) o.next(userLeft(user)) })
-        on('user change nick', (oldUser, newUser) => o.next(userChangedNick(oldUser, newUser)))
-        on('message', msg => o.next(messageReceived(msg)))
+        let evts = [];
+        const on = (evt, fn) => { sock.on(evt, fn); evts.push({ evt, fn }); };
+        on('update users', users => o.next(updateUsers(users)));
+        on('user joined', user => o.next(userJoined(user)));
+        on('user left', user => { if (user.nick) o.next(userLeft(user)) });
+        on('user change nick', (oldUser, newUser) => o.next(userChangedNick(oldUser, newUser)));
+        on('message', msg => o.next(messageReceived(msg)));
         return () => {
-          evts.forEach(({ evt, fn }) => sock.off(evt, fn))
-        }
+          evts.forEach(({ evt, fn }) => sock.off(evt, fn));
+        };
       })));
 
 const socketUserEpic = (action$, state$, { sock$ }) =>
@@ -46,5 +46,4 @@ const socketMessageEpic = (action$, state$, { sock$ }) =>
 export default combineEpics(
   socketReceiveEpic,
   socketUserEpic,
-  socketMessageEpic
-)
+  socketMessageEpic);
