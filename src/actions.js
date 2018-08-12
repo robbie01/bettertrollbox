@@ -20,4 +20,4 @@ export const changeNick = createAction('change nick')
 export const changeColor = createAction('change color')
 export const sendMessage = createAction('send message')
 
-export const connectSocket = createAction('connect socket')
+export const connectSocket = createAction('connect socket', payload => payload != null ? payload : '//www.windows93.net:8081')

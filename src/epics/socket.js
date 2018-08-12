@@ -14,8 +14,8 @@ import {
 const socketConnectEpic = (action$, state$, { io, sock$ }) =>
   action$.pipe(
     ofType(connectSocket.getType()),
+    startWith(connectSocket()),
     pluck('payload'),
-    startWith('//www.windows93.net:8081'),
     switchMap(dest =>
       new Observable(o => {
         const sock = io(dest);

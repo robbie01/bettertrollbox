@@ -23,7 +23,7 @@ const configureStore = () => {
   const store = createStore(
     rootReducer,
     {
-      user: initialUser || undefined
+      user: initialUser != null ? initialUser : undefined
     },
     composeEnhancers(
       applyMiddleware(epicMiddleware)
