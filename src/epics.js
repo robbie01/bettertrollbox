@@ -21,7 +21,7 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
         on('update users', users => next(updateUsers(users)))
         on('user joined', user => next(userJoined(user)))
         on('user left', user => { if (user.nick) next(userLeft(user)) })
-        on('user change nick', (oldUser, newUser) => next(userChangedNick(oldUser, newUser))
+        on('user change nick', (oldUser, newUser) => next(userChangedNick(oldUser, newUser)))
         on('message', msg => next(messageReceived(msg)))
         return () => {
           evts.forEach(({ evt, fn }) => sock.off(evt, fn))
