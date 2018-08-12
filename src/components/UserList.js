@@ -19,8 +19,7 @@ const UserListContainer = styled.div`
 const UserListMember = styled.div`
   display: flex;
   flex: 0 0 auto;
-  display: flex;
-  align-items: center;
+  align-items: flex-end;
   font-weight: 600;
   font-size: 16px;
   padding: 8px;
@@ -30,12 +29,12 @@ const UserListMember = styled.div`
   &:hover {
     background: #36393f;
   }
-`;
 
-const ULMUser = styled(User)`
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
+  & ${User} {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+`;
 
 const UserListCrown = styled.img.attrs({
   src: crown,
@@ -49,7 +48,7 @@ const UserListCrown = styled.img.attrs({
 const UserList = ({ users }) => (
   <UserListContainer>
     {users.map(({ nick, color, key }, i) => (
-      <UserListMember key={key}><ULMUser color={color}>{unescapeText(nick)}</ULMUser>{i === 0 ? (<UserListCrown />) : null}</UserListMember>
+      <UserListMember key={key}><User color={color}>{unescapeText(nick)}</User>{i === 0 ? (<UserListCrown />) : null}</UserListMember>
     ))}
   </UserListContainer>
 );
