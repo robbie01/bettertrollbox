@@ -34,6 +34,7 @@ const store = createStore(
 epicMiddleware.run(rootEpic);
 const sock = io('//www.windows93.net:8081');
 sock.on('connect', () => sock$.next(sock));
+sock.on('disconnect', () => sock$.next(null));
 
 const Root = () => (
   <Provider store={store}>
