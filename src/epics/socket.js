@@ -8,7 +8,7 @@ import {
   userChangedNick,
   messageReceived,
   sendMessage
-} from './actions';
+} from '../actions';
 
 const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
@@ -42,15 +42,8 @@ const socketMessageEpic = (action$, state$, { sock$ }) =>
         tap(({ payload }) => sock.emit('message', payload)),
         ignoreElements())));
 
-const localStorageUserEpic = (action$, state$, { localStorage }) =>
-  state$.pipe(
-    pluck('user'),
-    distinctUntilChanged((p, q) => p.nick === q.nick && p.color === q.color),
-    tap(user => localStorage.setItem('user', JSON.stringify(user))),
-    ignoreElements());
-
 export default combineEpics(
   socketReceiveEpic,
   socketUserEpic,
-  socketMessageEpic,
-  localStorageUserEpic);
+  socketMessageEpic
+)
