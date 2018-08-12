@@ -1,5 +1,5 @@
 import { Observable, EMPTY } from 'rxjs';
-import { switchMap, tap, ignoreElements, pluck, distinctUntilChanged } from 'rxjs/operators';
+import { switchMap, startWith, tap, ignoreElements, pluck, distinctUntilChanged } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import {
   updateUsers,
@@ -7,8 +7,24 @@ import {
   userLeft,
   userChangedNick,
   messageReceived,
-  sendMessage
+  sendMessage,
+  connectSocket
 } from '../actions';
+
+const socketConnectEpic = (action$, state$, { io, sock$ }) =>
+  action$.pipe(
+    ofType(connectSocket.getType()),
+    pluck('payload'),
+    startWith('//www.windows93.net:8081'),
+    switchMap(dest =>
+      new Observable(o => {
+        const sock = io(dest);
+        sock.on('connect', () => sock$.next(sock));
+        sock.on('disconnect', () => sock$.next(null));
+        return () => {
+          sock.close();
+        };
+      })));
 
 const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
@@ -40,10 +56,12 @@ const socketMessageEpic = (action$, state$, { sock$ }) =>
     switchMap(sock => sock == null ? EMPTY :
       action$.pipe(
         ofType(sendMessage.getType()),
-        tap(({ payload }) => sock.emit('message', payload)),
+        pluck('payload'),
+        tap(msg => sock.emit('message', msg)),
         ignoreElements())));
 
 export default combineEpics(
+  socketConnectEpic,
   socketReceiveEpic,
   socketUserEpic,
   socketMessageEpic);

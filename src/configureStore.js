@@ -15,7 +15,7 @@ const configureStore = () => {
 
   const sock$ = new BehaviorSubject(null);
   const epicMiddleware = createEpicMiddleware({
-    dependencies: { sock$, localStorage }
+    dependencies: { io, sock$, localStorage }
   });
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -31,10 +31,6 @@ const configureStore = () => {
   );
 
   epicMiddleware.run(rootEpic);
-
-  const sock = io('//www.windows93.net:8081');
-  sock.on('connect', () => sock$.next(sock));
-  sock.on('disconnect', () => sock$.next(null));
 
   return store;
 };

@@ -19,3 +19,5 @@ export const messageReceived = createAction('message received')
 export const changeNick = createAction('change nick')
 export const changeColor = createAction('change color')
 export const sendMessage = createAction('send message')
+
+export const connectSocket = createAction('connect socket')
