@@ -16,11 +16,16 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
     switchMap(sock =>
       new Observable(observer => {
         const next = observer.next.bind(observer)
-        sock.on('update users', users => next(updateUsers(users)))
-        sock.on('user joined', user => next(userJoined(user)))
-        sock.on('user left', user => { if (user.nick) next(userLeft(user)) })
-        sock.on('user change nick', (oldUser, newUser) => next(userChangedNick(oldUser, newUser)))
-        sock.on('message', msg => next(messageReceived(msg)))
+        let evts = []
+        const on = (evt, fn) => { sock.on(evt, fn); evts.push({ evt, fn }); }
+        on('update users', users => next(updateUsers(users)))
+        on('user joined', user => next(userJoined(user)))
+        on('user left', user => { if (user.nick) next(userLeft(user)) })
+        on('user change nick', (oldUser, newUser) => next(userChangedNick(oldUser, newUser))
+        on('message', msg => next(messageReceived(msg)))
+        return () => {
+          evts.forEach(({ evt, fn }) => sock.off(evt, fn))
+        }
       })));
 
 const socketUserEpic = (action$, state$, { sock$ }) =>
