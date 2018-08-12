@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 
 import {
   updateUsers,
+  clearChatState,
   userJoined,
   userLeft,
   userChangedNick,
@@ -12,10 +13,12 @@ import {
 } from './actions';
 
 const users = createReducer({
-  [updateUsers]: (state, payload) => payload
+  [updateUsers]: (state, payload) => payload,
+  [clearChatState]: () => []
 }, []);
 
 const messages = createReducer({
+  [clearChatState]: () => [],
   [userJoined]: (state, payload) => [ ...state, { ...payload, type: 'joined' } ],
   [userLeft]: (state, payload) => [ ...state, { ...payload, type: 'left' } ],
   [userChangedNick]: (state, payload) => [ ...state, { ...payload, type: 'changed nick' } ],

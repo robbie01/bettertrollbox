@@ -3,6 +3,7 @@ import { switchMap, startWith, tap, ignoreElements, pluck, distinctUntilChanged 
 import { combineEpics, ofType } from 'redux-observable';
 import {
   updateUsers,
+  clearChatState,
   userJoined,
   userLeft,
   userChangedNick,
@@ -32,6 +33,7 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
     switchMap(sock => sock == null ? EMPTY :
       new Observable(o => {
+        o.next(clearChatState());
         let evts = [];
         const on = (evt, fn) => { sock.on(evt, fn); evts.push({ evt, fn }); };
         on('update users', users => o.next(updateUsers(users)));

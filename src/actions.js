@@ -10,6 +10,7 @@ export const updateUsers = createAction('update users', users =>
 )
 
 // messages
+export const clearChatState = createAction('clear chat state')
 export const userJoined = createAction('user joined', payload => ({ ...payload, date: +moment() }))
 export const userLeft = createAction('user left', payload => ({ ...payload, date: +moment() }))
 export const userChangedNick = createAction('user changed nick', (oldUser, newUser) => ({ oldUser, newUser, date: +moment() }))
