@@ -51,13 +51,27 @@ const Message = styled.div`
   align-items: ${props => props.center ? 'center' : 'baseline'};
   color: hsla(0,0%,100%,.7);
   font-size: 0.9375rem;
+
+  & ${User} {
+    flex: 0 0 auto;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 `;
 
 const PaddedText = styled.span`
   padding-right: 5px;
 `;
 
-const Timestamp = styled(PaddedText)`
+const Timestamp = styled(PaddedText).attrs({
+  children: ({ date }) => (
+    <React.Fragment>
+      <HighlightSep style={{ position: "initial" }}>[</HighlightSep>{moment(date).format('hh:mm A')}<HighlightSep>] </HighlightSep>
+    </React.Fragment>
+  )
+})`
   flex: 0 0 auto;
   font-size: 0.6875rem;
   line-height: 1rem;
@@ -71,15 +85,7 @@ const Timestamp = styled(PaddedText)`
   }
 `;
 
-const AuthorUser = styled(User)`
-  flex: 0 0 auto;
-  max-width: 200px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`;
-
-const PaddedUser = styled(AuthorUser)`
+const PaddedUser = styled(User)`
   padding-right: 5px;
 `;
 
@@ -92,6 +98,7 @@ const MessageText = styled.span`
 `;
 
 const HighlightSep = styled.span`
+  position: absolute;
   opacity: 0;
   width: 0;
 `;
@@ -108,14 +115,14 @@ const MessagesList = ({ messages }) => (
     {messages.map((msg, i) =>
         msg.type === 'changed nick' ? (
           <Message key={i}>
-            <Timestamp>{moment(msg.date).format('hh:mm A')} </Timestamp>
+            <Timestamp date={msg.date} />
             <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)} </PaddedUser>
             <PaddedText>is now </PaddedText>
-            <AuthorUser color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</AuthorUser>
+            <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
           </Message>
         ) : msg.type === 'message' ? (
           <Message key={i}>
-            <Timestamp><HighlightSep>[</HighlightSep>{moment(msg.date).format('hh:mm A')}<HighlightSep>] </HighlightSep></Timestamp>
+            <Timestamp date={msg.date} />
             <PaddedUser color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedUser>
             <MessageText dangerouslySetInnerHTML={{__html: unescapeText2(msg.msg)}} />
           </Message>
