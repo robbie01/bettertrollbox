@@ -21,8 +21,7 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
         sock.on('user left', user => { if (user.nick) next(userLeft(user)) })
         sock.on('user change nick', (oldUser, newUser) => next(userChangedNick(oldUser, newUser)))
         sock.on('message', msg => next(messageReceived(msg)))
-      }))
-  );
+      })));
 
 const socketUserEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
@@ -32,8 +31,7 @@ const socketUserEpic = (action$, state$, { sock$ }) =>
         pluck('user'),
         distinctUntilChanged((p, q) => p.nick === q.nick && p.color === q.color),
         tap(({ nick, color }) => sock.emit('user joined', nick, color)),
-        ignoreElements()))
-  );
+        ignoreElements())));
 
 const socketMessageEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
@@ -41,8 +39,7 @@ const socketMessageEpic = (action$, state$, { sock$ }) =>
     switchMap(sock =>
       action$.ofType(sendMessage.getType()).pipe(
         tap(({ payload }) => sock.emit('message', payload)),
-        ignoreElements()))
-  );
+        ignoreElements())));
 
 const localStorageUserEpic = (action$, state$, { localStorage }) =>
   state$.pipe(
