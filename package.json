@@ -11,7 +11,8 @@
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
     "redux-act": "^1.7.4",
-    "redux-saga": "^0.16.0",
+    "redux-observable": "^1.0.0",
+    "rxjs": "6",
     "socket.io-client": "^2.1.1",
     "styled-components": "^3.3.3"
   },

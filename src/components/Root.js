@@ -1,9 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import { createEpicMiddleware } from 'redux-observable';
+import io from 'socket.io-client';
 import rootReducer from '../reducers';
-import rootSaga from '../sagas';
+import rootEpic from '../epics';
 import App from './App';
 
 let initialUser;
@@ -13,7 +14,9 @@ try {
   // nothing
 }
 
-const sagaMiddleware = createSagaMiddleware();
+const epicMiddleware = createEpicMiddleware({
+  dependencies: { sock: io('//www.windows93.net:8081') }
+});
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   rootReducer,
@@ -21,13 +24,13 @@ const store = createStore(
     user: initialUser || undefined
   },
   composeEnhancers(
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(epicMiddleware)
   )
 );
 store.subscribe(() => {
   localStorage.setItem('user', JSON.stringify(store.getState().user));
 });
-sagaMiddleware.run(rootSaga);
+epicMiddleware.run(rootEpic);
 
 const Root = () => (
   <Provider store={store}>
