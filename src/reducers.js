@@ -9,7 +9,8 @@ import {
   userChangedNick,
   messageReceived,
   changeNick,
-  changeColor
+  changeColor,
+  changeUser
 } from './actions';
 
 const users = createReducer({
@@ -33,6 +34,10 @@ const user = createReducer({
   [changeColor]: (state, payload) => ({
     ...state,
     color: payload
+  }),
+  [changeUser]: (state, payload) => ({
+    ...state,
+    ...payload
   })
 }, {
   nick: 'anonymous',
