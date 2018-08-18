@@ -16,10 +16,11 @@ export const userLeft = createAction('user left', payload => ({ ...payload, date
 export const userChangedNick = createAction('user changed nick', (oldUser, newUser) => ({ oldUser, newUser, date: +moment() }))
 export const messageReceived = createAction('message received')
 
-// commands
+// user
 export const changeNick = createAction('change nick')
 export const changeColor = createAction('change color')
 export const changeUser = createAction('change user', (nick, color) => ({ nick, color }))
-export const sendMessage = createAction('send message')
 
+// commands
+export const sendMessage = createAction('send message')
 export const connectSocket = createAction('connect socket')
