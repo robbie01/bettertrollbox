@@ -1,5 +1,9 @@
 import { EMPTY, fromEvent, merge } from 'rxjs';
-import { map, filter, switchMap, startWith, tap, ignoreElements, pluck, distinctUntilChanged, finalize } from 'rxjs/operators';
+import {
+  map, filter, switchMap, startWith, tap,
+  ignoreElements, pluck, distinctUntilChanged,
+  finalize
+} from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import {
   updateUsers,
