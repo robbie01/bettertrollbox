@@ -2,7 +2,7 @@ import { EMPTY, fromEvent, merge } from 'rxjs';
 import {
   map, filter, switchMap, startWith, tap,
   ignoreElements, pluck, distinctUntilChanged,
-  finalize
+  finalize, mapTo
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import {
@@ -23,12 +23,10 @@ const socketConnectEpic = (action$, state$, { io, sock$, defaultServer }) =>
     map(dest => io(dest)),
     switchMap(sock => 
       merge(
-        fromEvent(sock, 'connect').pipe(
-          map(() => sock)),
-        fromEvent(sock, 'disconnect').pipe(
-          map(() => null))
+        fromEvent(sock, 'connect').pipe(mapTo(sock)),
+        fromEvent(sock, 'disconnect').pipe(mapTo(null))
       ).pipe(
-          finalize(() => sock.close()))
+        finalize(() => sock.close()))
     ),
     tap(sock$),
     ignoreElements(),
