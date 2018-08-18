@@ -1,5 +1,5 @@
 import { EMPTY, fromEvent, merge } from 'rxjs';
-import { map, switchMap, startWith, tap, ignoreElements, pluck, distinctUntilChanged, finalize } from 'rxjs/operators';
+import { map, filter, switchMap, startWith, tap, ignoreElements, pluck, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import {
   updateUsers,
@@ -39,6 +39,7 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
         fromEvent(sock, 'user joined').pipe(
           map(user => userJoined(user))),
         fromEvent(sock, 'user left').pipe(
+          filter(user => !!user.nick),
           map(user => userLeft(user))),
         fromEvent(sock, 'user change nick',
           (oldUser, newUser) => ({ oldUser, newUser })
