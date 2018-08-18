@@ -1,4 +1,5 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
 import { BehaviorSubject } from 'rxjs';
 import { createEpicMiddleware } from 'redux-observable';
 import io from 'socket.io-client';
@@ -19,7 +20,7 @@ const configureStore = () => {
       defaultServer: '//www.windows93.net:8081' }
   });
 
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const composeEnhancers = composeWithDevTools({})
 
   const store = createStore(
     rootReducer,
