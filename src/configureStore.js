@@ -15,7 +15,8 @@ const configureStore = () => {
 
   const sock$ = new BehaviorSubject(null);
   const epicMiddleware = createEpicMiddleware({
-    dependencies: { io, sock$, localStorage }
+    dependencies: { io, sock$, localStorage,
+      defaultServer: '//www.windows93.net:8081' }
   });
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

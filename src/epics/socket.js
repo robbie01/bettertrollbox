@@ -12,7 +12,7 @@ import {
   connectSocket
 } from '../actions';
 
-const socketConnectEpic = (action$, state$, { io, sock$ }) =>
+const socketConnectEpic = (action$, state$, { io, sock$, defaultServer }) =>
   action$.pipe(
     ofType(connectSocket.getType()),
     pluck('payload'),
@@ -28,7 +28,7 @@ const socketConnectEpic = (action$, state$, { io, sock$ }) =>
     ),
     tap(sock$),
     ignoreElements(),
-    startWith(connectSocket()));
+    startWith(connectSocket(defaultServer)));
 
 const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
