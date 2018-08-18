@@ -26,6 +26,7 @@ const socketConnectEpic = (action$, state$, { io, sock$, defaultServer }) =>
         fromEvent(sock, 'connect').pipe(mapTo(sock)),
         fromEvent(sock, 'disconnect').pipe(mapTo(null))
       ).pipe(
+        startWith(null),
         finalize(() => sock.close()))
     ),
     tap(sock$),
