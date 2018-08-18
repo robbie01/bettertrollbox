@@ -6,7 +6,7 @@ const localStorageUserEpic = (action$, state$, { localStorage }) =>
   state$.pipe(
     pluck('user'),
     distinctUntilChanged((p, q) => p.nick === q.nick && p.color === q.color),
-    map(JSON.stringify),
+    map(user => JSON.stringify(user)),
     tap(user => localStorage.setItem('user', user)),
     ignoreElements());
 
