@@ -39,7 +39,7 @@ const socketReceiveEpic = (action$, state$, { sock$ }) =>
         fromEvent(sock, 'user joined').pipe(
           map(user => userJoined(user))),
         fromEvent(sock, 'user left').pipe(
-          filter(user => !!user.nick),
+          filter(user => 'nick' in user),
           map(user => userLeft(user))),
         fromEvent(sock, 'user change nick',
           (oldUser, newUser) => ({ oldUser, newUser })
