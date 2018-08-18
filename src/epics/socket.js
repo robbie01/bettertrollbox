@@ -1,5 +1,5 @@
-import { Observable, EMPTY } from 'rxjs';
-import { switchMap, startWith, tap, ignoreElements, pluck, distinctUntilChanged } from 'rxjs/operators';
+import { EMPTY, fromEvent, merge } from 'rxjs';
+import { map, switchMap, startWith, tap, ignoreElements, pluck, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import {
   updateUsers,
@@ -16,35 +16,39 @@ const socketConnectEpic = (action$, state$, { io, sock$ }) =>
   action$.pipe(
     ofType(connectSocket.getType()),
     pluck('payload'),
-    switchMap(dest =>
-      new Observable(o => {
-        const sock = io(dest);
-        sock.on('connect', () => o.next(sock));
-        sock.on('disconnect', () => o.next(null));
-        return () => {
-          sock.close();
-        };
-      })),
+    map(dest => io(dest)),
+    switchMap(sock => 
+      merge(
+        fromEvent(sock, 'connect').pipe(
+          map(() => sock)),
+        fromEvent(sock, 'disconnect').pipe(
+          map(() => null))
+      ).pipe(
+          finalize(() => sock.close()))
+    ),
     tap(sock$),
     ignoreElements(),
     startWith(connectSocket()));
 
 const socketReceiveEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
-    switchMap(sock => sock == null ? EMPTY :
-      new Observable(o => {
-        o.next(clearChatState());
-        let evts = [];
-        const on = (evt, fn) => { sock.on(evt, fn); evts.push({ evt, fn }); };
-        on('update users', users => o.next(updateUsers(users)));
-        on('user joined', user => o.next(userJoined(user)));
-        on('user left', user => { if (user.nick) o.next(userLeft(user)) });
-        on('user change nick', (oldUser, newUser) => o.next(userChangedNick(oldUser, newUser)));
-        on('message', msg => o.next(messageReceived(msg)));
-        return () => {
-          evts.forEach(({ evt, fn }) => sock.off(evt, fn));
-        };
-      })));
+    switchMap(sock => sock == null ? EMPTY : 
+      merge(
+        fromEvent(sock, 'update users').pipe(
+          map(users => updateUsers(users))),
+        fromEvent(sock, 'user joined').pipe(
+          map(user => userJoined(user))),
+        fromEvent(sock, 'user left').pipe(
+          map(user => userLeft(user))),
+        fromEvent(sock, 'user change nick',
+          (oldUser, newUser) => ({ oldUser, newUser })
+        ).pipe(
+          map(({ oldUser, newUser }) => userChangedNick(oldUser, newUser))),
+        fromEvent(sock, 'message').pipe(
+          map(msg => messageReceived(msg)))
+      ).pipe(
+        startWith(clearChatState()))
+    ));
 
 const socketUserEpic = (action$, state$, { sock$ }) =>
   sock$.pipe(
