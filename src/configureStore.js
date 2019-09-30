@@ -17,7 +17,7 @@ const configureStore = () => {
   const sock$ = new BehaviorSubject(null);
   const epicMiddleware = createEpicMiddleware({
     dependencies: { io, sock$, localStorage,
-      defaultServer: '//www.windows93.net:8081' }
+      defaultServer: 'ws://darkok.xyz:8082' }
   });
 
   const composeEnhancers = composeWithDevTools({})

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import MessagesList from './MessagesList';
 import MessageForm from './MessageForm';
 import UserList from './UserList';
@@ -8,6 +8,17 @@ import Preloader from './Preloader';
 import crown from '../resources/crown.svg';
 import joined from '../resources/joined.svg';
 import left from '../resources/left.svg';
+
+const GlobalStyles = createGlobalStyle`
+  html {
+    font-size: 100%;
+  }
+
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+`;
 
 const AppContainer = styled.div`
   height: 100%;
@@ -34,6 +45,7 @@ const App = () => (
       [joined]: 'image',
       [left]: 'image'
     }} />
+    <GlobalStyles />
     <LeftPane>
       <MessagesList />
       <MessageForm />

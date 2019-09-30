@@ -96,9 +96,9 @@ class MessageForm extends React.Component {
   render() {
     return (
       <MessageFormContainer onSubmit={() => false}>
-        <MessageFormTextarea onKeyUp={this.onKeyUp} innerRef={this.inputRef} textRows={this.state.input.split('\n').length}
+        <MessageFormTextarea onKeyUp={this.onKeyUp} ref={this.inputRef} textRows={this.state.input.split('\n').length}
           placeholder="Message" rows={1} value={this.state.input}
-          onInput={e => this.setState({ input: e.target.value })} />
+          onChange={e => this.setState({ input: e.target.value })} />
       </MessageFormContainer>
     );
   }

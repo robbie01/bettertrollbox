@@ -8,19 +8,31 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
-    "react-scripts": "1.1.4",
+    "react-scripts": "3",
     "redux": "^4.0.0",
     "redux-act": "^1.7.4",
     "redux-devtools-extension": "^2.13.5",
     "redux-observable": "^1.0.0",
     "rxjs": "6",
     "socket.io-client": "^2.1.1",
-    "styled-components": "^3.3.3"
+    "styled-components": "^4.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
