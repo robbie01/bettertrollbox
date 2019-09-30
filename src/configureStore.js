@@ -1,24 +1,24 @@
-import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
-import { BehaviorSubject } from 'rxjs';
-import { createEpicMiddleware } from 'redux-observable';
-import io from 'socket.io-client';
-import rootReducer from './reducers';
-import rootEpic from './epics';
+import { createStore, applyMiddleware } from "redux"
+import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction"
+import { BehaviorSubject } from "rxjs"
+import { createEpicMiddleware } from "redux-observable"
+import io from "socket.io-client"
+import rootReducer from "./reducers"
+import rootEpic from "./epics"
 
 const configureStore = () => {
-  let initialUser;
+  let initialUser
   try {
-    initialUser = JSON.parse(localStorage.getItem('user'));
+    initialUser = JSON.parse(localStorage.getItem("user"))
   } catch (ex) {
     // nothing
   }
 
-  const sock$ = new BehaviorSubject(null);
+  const sock$ = new BehaviorSubject(null)
   const epicMiddleware = createEpicMiddleware({
     dependencies: { io, sock$, localStorage,
-      defaultServer: 'ws://darkok.xyz:8082' }
-  });
+      defaultServer: "ws://darkok.xyz:8082" }
+  })
 
   const composeEnhancers = composeWithDevTools({})
 
@@ -30,11 +30,11 @@ const configureStore = () => {
     composeEnhancers(
       applyMiddleware(epicMiddleware)
     )
-  );
+  )
 
-  epicMiddleware.run(rootEpic);
+  epicMiddleware.run(rootEpic)
 
-  return store;
-};
+  return store
+}
 
-export default configureStore;
+export default configureStore

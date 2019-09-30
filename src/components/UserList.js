@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import crown from '../resources/crown.svg';
-import User from './User';
-import { unescapeText } from '../utils';
+import React from "react"
+import styled from "styled-components"
+import { connect } from "react-redux"
+import crown from "../resources/crown.svg"
+import User from "./User"
+import { unescapeText } from "../utils"
 
 const UserListContainer = styled.div`
   flex: 0 0 auto;
@@ -14,7 +14,7 @@ const UserListContainer = styled.div`
   flex-direction: column;
   background: #2f3136;
   padding: 8px 0;
-`;
+`
 
 const UserListMember = styled.div`
   display: flex;
@@ -35,7 +35,7 @@ const UserListMember = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-`;
+`
 
 const UserListCrown = styled.img.attrs({
   src: crown,
@@ -52,10 +52,10 @@ const UserList = ({ users }) => (
       <UserListMember key={key}><User color={color}>{unescapeText(nick)}</User>{i === 0 ? (<UserListCrown />) : null}</UserListMember>
     ))}
   </UserListContainer>
-);
+)
 
 const mapStateToProps = ({ users }) => ({
   users
-});
+})
 
-export default connect(mapStateToProps)(UserList);
+export default connect(mapStateToProps)(UserList)

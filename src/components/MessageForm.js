@@ -1,14 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { sendMessage } from '../actions';
+import React from "react"
+import styled from "styled-components"
+import { connect } from "react-redux"
+import { sendMessage } from "../actions"
 
 const MessageFormContainer = styled.form`
   flex: 0 0 auto;
   margin: 0 20px;
   box-shadow: 0 -1px 0 hsla(0,0%,100%,.06);
   padding: 20px 0 30px;
-`;
+`
 
 const MessageFormTextarea = styled.textarea.attrs({
   style: ({ textRows }) => ({
@@ -57,55 +57,55 @@ const MessageFormTextarea = styled.textarea.attrs({
     background: none;
     border: none;
   }
-`;
+`
 
 class MessageForm extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      input: ''
-    };
-    this.inputRef = React.createRef();
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
+      input: ""
+    }
+    this.inputRef = React.createRef()
+    this.onKeyDown = this.onKeyDown.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
   }
 
   onKeyDown(e) {
     if (!e.ctrlKey)
-      this.inputRef.current.focus();
-    if (e.key === 'Enter' && !e.shiftKey)
-      e.preventDefault();
+      this.inputRef.current.focus()
+    if (e.key === "Enter" && !e.shiftKey)
+      e.preventDefault()
   }
 
   onKeyUp(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      this.props.onSubmit(e.target.value);
-      this.setState({ input: '' });
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      this.props.onSubmit(e.target.value)
+      this.setState({ input: "" })
     }
   }
 
   componentDidMount() {
-    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener("keydown", this.onKeyDown)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener("keydown", this.onKeyDown)
   }
 
   render() {
     return (
       <MessageFormContainer onSubmit={() => false}>
-        <MessageFormTextarea onKeyUp={this.onKeyUp} ref={this.inputRef} textRows={this.state.input.split('\n').length}
+        <MessageFormTextarea onKeyUp={this.onKeyUp} ref={this.inputRef} textRows={this.state.input.split("\n").length}
           placeholder="Message" rows={1} value={this.state.input}
           onChange={e => this.setState({ input: e.target.value })} />
       </MessageFormContainer>
-    );
+    )
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: msg => dispatch(sendMessage(msg))
-});
+})
 
-export default connect(() => ({}), mapDispatchToProps)(MessageForm);
+export default connect(() => ({}), mapDispatchToProps)(MessageForm)

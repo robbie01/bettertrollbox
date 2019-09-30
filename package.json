@@ -5,9 +5,9 @@
   "dependencies": {
     "moment": "^2.22.2",
     "normalize.css": "^8.0.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-redux": "^5.0.7",
+    "react": "^16.10",
+    "react-dom": "^16.10",
+    "react-redux": "^7.1",
     "react-scripts": "3",
     "redux": "^4.0.0",
     "redux-act": "^1.7.4",
@@ -21,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:fix": "eslint src/**/*.js --fix"
   },
   "browserslist": {
     "production": [
@@ -34,5 +35,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^6.5.0"
   }
 }

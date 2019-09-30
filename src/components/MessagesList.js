@@ -1,13 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import moment from 'moment';
-import User from './User';
-import autoScroller from './AutoScroller';
-import { unescapeText, unescapeText2 } from '../utils';
+import React from "react"
+import { connect } from "react-redux"
+import styled from "styled-components"
+import moment from "moment"
+import User from "./User"
+import autoScroller from "./AutoScroller"
+import { unescapeText, unescapeText2 } from "../utils"
 
-import joined from '../resources/joined.svg';
-import left from '../resources/left.svg';
+import joined from "../resources/joined.svg"
+import left from "../resources/left.svg"
 
 const MessagesScroller = styled.div`
   &::-webkit-scrollbar {
@@ -29,7 +29,7 @@ const MessagesScroller = styled.div`
     background-color: #2f3136;
     border-color: #36393f;    
   }
-`;
+`
 
 const MessagesListContainer = styled(autoScroller(MessagesScroller))`
   height: 100%;
@@ -38,7 +38,7 @@ const MessagesListContainer = styled(autoScroller(MessagesScroller))`
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: scroll;
-`;
+`
 
 const Message = styled.div`
   margin: 0 6px 0 20px;
@@ -48,7 +48,7 @@ const Message = styled.div`
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
-  align-items: ${props => props.center ? 'center' : 'baseline'};
+  align-items: ${props => props.center ? "center" : "baseline"};
   color: hsla(0,0%,100%,.7);
   font-size: 0.9375rem;
 
@@ -59,16 +59,16 @@ const Message = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-`;
+`
 
 const PaddedText = styled.span`
   padding-right: 5px;
-`;
+`
 
 const Timestamp = styled(PaddedText).attrs({
   children: ({ date }) => (
     <React.Fragment>
-      <HighlightSep style={{ position: "initial" }}>[</HighlightSep>{moment(date).format('hh:mm A')}<HighlightSep>] </HighlightSep>
+      <HighlightSep style={{ position: "initial" }}>[</HighlightSep>{moment(date).format("hh:mm A")}<HighlightSep>] </HighlightSep>
     </React.Fragment>
   )
 })`
@@ -83,11 +83,7 @@ const Timestamp = styled(PaddedText).attrs({
   ${Message}:hover & {
     color: #99aab5;
   }
-`;
-
-const PaddedUser = styled(User)`
-  padding-right: 5px;
-`;
+`
 
 const MessageText = styled.span`
   font-family: 'Ubuntu Mono', monospace;
@@ -95,59 +91,59 @@ const MessageText = styled.span`
   word-wrap: break-word;
   word-break: break-all;
   hyphens: auto;
-`;
+`
 
 const HighlightSep = styled.span`
   position: absolute;
   opacity: 0;
   width: 0;
-`;
+`
 
 const Icon = styled.img.attrs({
   width: 16,
   height: 16
 })`
   margin-right: 8px;
-`;
+`
 
 const MessagesList = ({ messages }) => (
   <MessagesListContainer>
     {messages.map((msg, i) =>
-        msg.type === 'changed nick' ? (
-          <Message key={i}>
-            <Timestamp date={msg.date} />
-            <PaddedUser color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)} </PaddedUser>
-            <PaddedText>is now </PaddedText>
-            <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
-          </Message>
-        ) : msg.type === 'message' ? (
-          <Message key={i}>
-            <Timestamp date={msg.date} />
-            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedUser>
-            <MessageText dangerouslySetInnerHTML={{__html: unescapeText2(msg.msg)}} />
-          </Message>
-        ) : msg.type === 'joined' ? (
-          <Message center key={i}>
-            <Icon src={joined} alt="Joined" />
-            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser> joined the Trollbox.
-          </Message>
-        ) : msg.type === 'left' ? (
-          <Message center key={i}>
-            <Icon src={left} alt="Left" />
-            <PaddedUser color={msg.color}>{unescapeText(msg.nick)}</PaddedUser> left the Trollbox.
-          </Message>
-        ) : (
-          <Message key={i}>
-            <PaddedUser color={msg.color}>{unescapeText(msg.nick)} </PaddedUser>
-            <span>{msg.type}</span>
-          </Message>
-        )
+      msg.type === "changed nick" ? (
+        <Message key={i}>
+          <Timestamp date={msg.date} />
+          <PaddedText as={User} color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)} </PaddedText>
+          <PaddedText>is now </PaddedText>
+          <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
+        </Message>
+      ) : msg.type === "message" ? (
+        <Message key={i}>
+          <Timestamp date={msg.date} />
+          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedText>
+          <MessageText dangerouslySetInnerHTML={{__html: unescapeText2(msg.msg)}} />
+        </Message>
+      ) : msg.type === "joined" ? (
+        <Message center key={i}>
+          <Icon src={joined} alt="Joined" />
+          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}</PaddedText> joined the Trollbox.
+        </Message>
+      ) : msg.type === "left" ? (
+        <Message center key={i}>
+          <Icon src={left} alt="Left" />
+          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}</PaddedText> left the Trollbox.
+        </Message>
+      ) : (
+        <Message key={i}>
+          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)} </PaddedText>
+          <span>{msg.type}</span>
+        </Message>
+      )
     )}
   </MessagesListContainer>
-);
+)
 
 const mapStateToProps = ({ messages }) => ({
   messages
-});
+})
 
 export default connect(mapStateToProps)(MessagesList)
