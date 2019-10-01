@@ -9,7 +9,13 @@ import { unescapeText, unescapeText2 } from "../utils"
 import joined from "../resources/joined.svg"
 import left from "../resources/left.svg"
 
-const MessagesScroller = styled.div`
+const MessagesScroller = autoScroller(styled.div`
+  height: 100%;
+  flex: 0 1 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 14px;
   }
@@ -29,16 +35,7 @@ const MessagesScroller = styled.div`
     background-color: #2f3136;
     border-color: #36393f;    
   }
-`
-
-const MessagesListContainer = styled(autoScroller(MessagesScroller))`
-  height: 100%;
-  flex: 0 1 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: scroll;
-`
+`)
 
 const Message = styled.div`
   margin: 0 6px 0 20px;
@@ -107,7 +104,7 @@ const Icon = styled.img.attrs({
 `
 
 const MessagesList = ({ messages }) => (
-  <MessagesListContainer>
+  <MessagesScroller>
     {messages.map((msg, i) =>
       msg.type === "changed nick" ? (
         <Message key={i}>
@@ -139,7 +136,7 @@ const MessagesList = ({ messages }) => (
         </Message>
       )
     )}
-  </MessagesListContainer>
+  </MessagesScroller>
 )
 
 const mapStateToProps = ({ messages }) => ({

@@ -1,54 +1,37 @@
-import React from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { findDOMNode } from "react-dom"
 
 const getDisplayName = function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || "Component"
 }
 
-const autoScroller = function autoScroller(InnerComponent) {
-  class Wrapper extends React.Component {
-    render() {
-      return (
-        <InnerComponent {...this.props} />
-      )
-    }
-  }
-
-  class AutoScroller extends React.Component {
-    constructor(props) {
-      super(props)
-      this.state = {
-        autoScroll: true
-      }
-      this.rootRef = React.createRef()
-      this.onScroll = this.onScroll.bind(this)
+const autoScroller = InnerComponent => {
+  const AutoScroller = props => {
+    const [autoScroll, setAutoScroll] = useState(true)
+    const rootRef = useRef(null)
+    const userScroll = useRef(false)
+    
+    const onManualScroll = () => {
+      const rootEl = rootRef.current
+      setAutoScroll(rootEl.scrollTop > rootEl.scrollHeight - rootEl.clientHeight - 5)
     }
 
-    onManualScroll() {
-      const rootEl = this.rootRef.current
-      this.setState({
-        autoScroll: rootEl.scrollTop > rootEl.scrollHeight - rootEl.clientHeight - 5
-      })
+    const onScroll = () => {
+      if (userScroll.current) onManualScroll()
     }
 
-    onScroll() {
-      if (this.userScroll) this.onManualScroll()
-    }
-
-    componentDidUpdate() {
-      if (this.state.autoScroll) {
-        this.userScroll = false
-        const rootEl = findDOMNode(this.rootRef.current)
+    useEffect(() => {
+      if (autoScroll) {
+        userScroll.current = false
+        const rootEl = rootRef.current
         rootEl.scrollTop = rootEl.scrollHeight
-        setTimeout(() => this.userScroll = true, 100)
+        setTimeout(() => userScroll.current = true, 100)
       }
-    }
+    })
 
-    render() {
-      return (
-        <Wrapper {...this.props} ref={this.rootRef} onScroll={this.onScroll} onWheel={() => this.userScroll = true} />
-      )
-    }
+    return (
+      <InnerComponent {...props} ref={rootRef} onScroll={onScroll} onWheel={() => userScroll.current = true} />
+    )
   }
   AutoScroller.displayName = `AutoScroller(${getDisplayName(InnerComponent)})`
   return AutoScroller
