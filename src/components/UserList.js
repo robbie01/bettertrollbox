@@ -19,8 +19,8 @@ const UserListContainer = styled.div`
 const UserListMember = styled.div`
   display: flex;
   flex: 0 0 auto;
-  align-items: flex-end;
-  font-weight: 600;
+  align-items: center;
+  font-weight: 500;
   font-size: 16px;
   padding: 8px;
   border-radius: 3px;

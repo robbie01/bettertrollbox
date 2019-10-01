@@ -65,13 +65,13 @@ const PaddedText = styled.span`
   padding-right: 5px;
 `
 
-const Timestamp = styled(PaddedText).attrs({
-  children: ({ date }) => (
-    <React.Fragment>
+const Timestamp = styled(PaddedText).attrs(({ date }) => ({
+  children: (
+    <>
       <HighlightSep style={{ position: "initial" }}>[</HighlightSep>{moment(date).format("hh:mm A")}<HighlightSep>] </HighlightSep>
-    </React.Fragment>
+    </>
   )
-})`
+}))`
   flex: 0 0 auto;
   font-size: 0.6875rem;
   line-height: 1rem;

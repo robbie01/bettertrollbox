@@ -10,11 +10,11 @@ const MessageFormContainer = styled.form`
   padding: 20px 0 30px;
 `
 
-const MessageFormTextarea = styled.textarea.attrs({
-  style: ({ textRows }) => ({
+const MessageFormTextarea = styled.textarea.attrs(({ textRows }) => ({
+  style: {
     height: `${Math.min(25+textRows*20, 220)}px`
-  })
-})`
+  }
+}))`
   font-family: 'Ubuntu Mono', monospace;
   appearance: none;
   box-shadow: none;
@@ -56,6 +56,10 @@ const MessageFormTextarea = styled.textarea.attrs({
   &::-webkit-scrollbar-corner {
     background: none;
     border: none;
+  }
+
+  &::placeholder {
+    color: hsla(0,0%,100%,0.3);
   }
 `
 

@@ -6,6 +6,7 @@ module.exports = {
       "eol-last": ["error", "always"],
       "comma-dangle": ["error", "never"],
       "linebreak-style": ["error", "unix"],
-      "quotes": ["error", "double"]
+      "quotes": ["error", "double"],
+      "curly": ["error", "multi-or-nest"]
   }
 }

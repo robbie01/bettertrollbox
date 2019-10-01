@@ -25,7 +25,7 @@ const autoScroller = function autoScroller(InnerComponent) {
     }
 
     onManualScroll() {
-      const rootEl = findDOMNode(this.rootRef.current)
+      const rootEl = this.rootRef.current
       this.setState({
         autoScroll: rootEl.scrollTop > rootEl.scrollHeight - rootEl.clientHeight - 5
       })
