@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { sendMessage } from "../actions"
@@ -63,49 +63,39 @@ const MessageFormTextarea = styled.textarea.attrs(({ textRows }) => ({
   }
 `
 
-class MessageForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      input: ""
-    }
-    this.inputRef = React.createRef()
-    this.onKeyDown = this.onKeyDown.bind(this)
-    this.onKeyUp = this.onKeyUp.bind(this)
-  }
-
-  onKeyDown(e) {
+const MessageForm = ({ onSubmit }) => {
+  const [input, setInput] = useState("")
+  const inputEl = useRef(null)
+  
+  const onKeyDown = e => {
     if (!e.ctrlKey)
-      this.inputRef.current.focus()
+      inputEl.current.focus()
     if (e.key === "Enter" && !e.shiftKey)
       e.preventDefault()
   }
 
-  onKeyUp(e) {
+  const onKeyUp = e => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
-      this.props.onSubmit(e.target.value)
-      this.setState({ input: "" })
+      onSubmit(e.target.value)
+      setInput("")
     }
   }
 
-  componentDidMount() {
-    window.addEventListener("keydown", this.onKeyDown)
-  }
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDown)
+    return () => {
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [])
 
-  componentWillUnmount() {
-    window.removeEventListener("keydown", this.onKeyDown)
-  }
-
-  render() {
-    return (
-      <MessageFormContainer onSubmit={() => false}>
-        <MessageFormTextarea onKeyUp={this.onKeyUp} ref={this.inputRef} textRows={this.state.input.split("\n").length}
-          placeholder="Message" rows={1} value={this.state.input}
-          onChange={e => this.setState({ input: e.target.value })} />
-      </MessageFormContainer>
-    )
-  }
+  return (
+    <MessageFormContainer onSubmit={() => false}>
+      <MessageFormTextarea ref={inputEl} onKeyUp={onKeyUp} textRows={input.split("\n").length}
+        placeholder="Message" rows={1} value={input}
+        onChange={e => setInput(e.target.value)} />
+    </MessageFormContainer>
+  )
 }
 
 const mapDispatchToProps = dispatch => ({
