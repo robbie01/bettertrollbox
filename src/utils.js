@@ -5,5 +5,5 @@ export const unescapeText = text => {
 }
 
 export const unescapeText2 = text => {
-  return text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "\u00A0").replace(/&#10;/g, "<br />")
+  return text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "\u00A0").replace(/&#10;|\n/g, "<br />")
 }
