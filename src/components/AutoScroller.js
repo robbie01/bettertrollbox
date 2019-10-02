@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from "react"
-import { findDOMNode } from "react-dom"
 
 const getDisplayName = function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || "Component"
