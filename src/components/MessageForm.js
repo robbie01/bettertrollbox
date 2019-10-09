@@ -10,11 +10,7 @@ const MessageFormContainer = styled.form`
   padding: 20px 0 30px;
 `
 
-const MessageFormTextarea = styled.textarea.attrs(({ textRows }) => ({
-  style: {
-    height: `${Math.min(25+textRows*20, 220)}px`
-  }
-}))`
+const MessageFormTextarea = styled.textarea`
   font-family: 'Ubuntu Mono', monospace;
   appearance: none;
   box-shadow: none;
@@ -22,6 +18,7 @@ const MessageFormTextarea = styled.textarea.attrs(({ textRows }) => ({
   color: hsla(0,0%,100%,.7);
   box-sizing: border-box;
   width: 100%;
+  max-height: 220px;
   padding: 12px;
   font-size: 0.9375rem;
   font-weight: 400;
@@ -91,9 +88,9 @@ const MessageForm = ({ onSubmit }) => {
 
   return (
     <MessageFormContainer onSubmit={() => false}>
-      <MessageFormTextarea ref={inputEl} onKeyUp={onKeyUp} textRows={input.split("\n").length}
-        placeholder="Message" rows={1} value={input}
-        onChange={e => setInput(e.target.value)} />
+      <MessageFormTextarea ref={inputEl} onKeyUp={onKeyUp}
+        rows={input.split("\n").length} placeholder="Message"
+        value={input} onChange={e => setInput(e.target.value)} />
     </MessageFormContainer>
   )
 }
