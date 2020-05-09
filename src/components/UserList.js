@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { connect } from "react-redux"
+import { useSelector } from "react-redux"
 import crown from "../resources/crown.svg"
 import User from "./User"
 import { unescapeText } from "../utils"
@@ -46,16 +46,16 @@ const UserListCrown = styled.img.attrs({
   margin-left: 4px;
 `
 
-const UserList = ({ users }) => (
-  <UserListContainer>
-    {users.map(({ nick, color, key }, i) => (
-      <UserListMember key={key}><User color={color}>{unescapeText(nick)}</User>{i === 0 ? (<UserListCrown />) : null}</UserListMember>
-    ))}
-  </UserListContainer>
-)
+const UserList = () => {
+  let usrs = useSelector(({ users }) => users)
 
-const mapStateToProps = ({ users }) => ({
-  users
-})
+  return (
+    <UserListContainer>
+      {usrs.map(({ nick, color, key }, i) => (
+        <UserListMember key={key}><User color={color}>{unescapeText(nick)}</User>{i === 0 ? (<UserListCrown />) : null}</UserListMember>
+      ))}
+    </UserListContainer>
+  )
+}
 
-export default connect(mapStateToProps)(UserList)
+export default UserList

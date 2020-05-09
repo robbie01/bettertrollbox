@@ -2,7 +2,7 @@ import { createAction } from "redux-act"
 import moment from "moment"
 
 // users
-export const updateUsers = createAction("update users", users =>
+export const updateUsers = createAction("UPDATE_USERS", users =>
   Object.entries(users).map(([key, user]) => ({
     ...user,
     key
@@ -10,17 +10,17 @@ export const updateUsers = createAction("update users", users =>
 )
 
 // messages
-export const clearChatState = createAction("clear chat state")
-export const userJoined = createAction("user joined", payload => ({ ...payload, date: +moment() }))
-export const userLeft = createAction("user left", payload => ({ ...payload, date: +moment() }))
-export const userChangedNick = createAction("user changed nick", (oldUser, newUser) => ({ oldUser, newUser, date: +moment() }))
-export const messageReceived = createAction("message received")
+export const clearChatState = createAction("CLEAR_CHAT_STATE")
+export const userJoined = createAction("USER_JOINED", payload => ({ ...payload, date: +moment() }))
+export const userLeft = createAction("USER_LEFT", payload => ({ ...payload, date: +moment() }))
+export const userChangedNick = createAction("USER_CHANGED_NICK", (oldUser, newUser) => ({ oldUser, newUser, date: +moment() }))
+export const messageReceived = createAction("MESSAGE_RECEIVED")
 
 // user
-export const changeNick = createAction("change nick")
-export const changeColor = createAction("change color")
-export const changeUser = createAction("change user", (nick, color) => ({ nick, color }))
+export const changeNick = createAction("CHANGE_NICK")
+export const changeColor = createAction("CHANGE_COLOR")
+export const changeUser = createAction("CHANGE_USER", (nick, color) => ({ nick, color }))
 
 // commands
-export const sendMessage = createAction("send message")
-export const connectSocket = createAction("connect socket")
+export const sendMessage = createAction("SEND_MESSAGE")
+export const connectSocket = createAction("CONNECT_SOCKET")

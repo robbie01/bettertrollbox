@@ -1,5 +1,5 @@
 import React from "react"
-import { connect } from "react-redux"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
 import moment from "moment"
 import User from "./User"
@@ -103,44 +103,43 @@ const Icon = styled.img.attrs({
   margin-right: 8px;
 `
 
-const MessagesList = ({ messages }) => (
-  <MessagesScroller>
-    {messages.map((msg, i) =>
-      msg.type === "changed nick" ? (
-        <Message key={i}>
-          <Timestamp date={msg.date} />
-          <PaddedText as={User} color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)} </PaddedText>
-          <PaddedText>is now </PaddedText>
-          <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
-        </Message>
-      ) : msg.type === "message" ? (
-        <Message key={i}>
-          <Timestamp date={msg.date} />
-          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedText>
-          <MessageText dangerouslySetInnerHTML={{__html: unescapeText2(msg.msg)}} />
-        </Message>
-      ) : msg.type === "joined" ? (
-        <Message center key={i}>
-          <Icon src={joined} alt="Joined" />
-          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}</PaddedText> joined the Trollbox.
-        </Message>
-      ) : msg.type === "left" ? (
-        <Message center key={i}>
-          <Icon src={left} alt="Left" />
-          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}</PaddedText> left the Trollbox.
-        </Message>
-      ) : (
-        <Message key={i}>
-          <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)} </PaddedText>
-          <span>{msg.type}</span>
-        </Message>
-      )
-    )}
-  </MessagesScroller>
-)
+const MessagesList = () => {
+  let msgs = useSelector(({ messages }) => messages)
+  return (
+    <MessagesScroller>
+      {msgs.map((msg, i) =>
+        msg.type === "changed nick" ? (
+          <Message key={i}>
+            <Timestamp date={msg.date} />
+            <PaddedText as={User} color={msg.oldUser.color}>{unescapeText(msg.oldUser.nick)} </PaddedText>
+            <PaddedText>is now </PaddedText>
+            <User color={msg.newUser.color}>{unescapeText(msg.newUser.nick)}</User>
+          </Message>
+        ) : msg.type === "message" ? (
+          <Message key={i}>
+            <Timestamp date={msg.date} />
+            <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}<HighlightSep>: </HighlightSep></PaddedText>
+            <MessageText dangerouslySetInnerHTML={{__html: unescapeText2(msg.msg.join('\n'))}} />
+          </Message>
+        ) : msg.type === "joined" ? (
+          <Message center key={i}>
+            <Icon src={joined} alt="Joined" />
+            <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}</PaddedText> joined the Trollbox.
+          </Message>
+        ) : msg.type === "left" ? (
+          <Message center key={i}>
+            <Icon src={left} alt="Left" />
+            <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)}</PaddedText> left the Trollbox.
+          </Message>
+        ) : (
+          <Message key={i}>
+            <PaddedText as={User} color={msg.color}>{unescapeText(msg.nick)} </PaddedText>
+            <span>{msg.type}</span>
+          </Message>
+        )
+      )}
+    </MessagesScroller>
+  )
+}
 
-const mapStateToProps = ({ messages }) => ({
-  messages
-})
-
-export default connect(mapStateToProps)(MessagesList)
+export default MessagesList

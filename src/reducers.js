@@ -23,7 +23,15 @@ const messages = createReducer({
   [userJoined]: (state, payload) => [ ...state, { ...payload, type: "joined" } ],
   [userLeft]: (state, payload) => [ ...state, { ...payload, type: "left" } ],
   [userChangedNick]: (state, payload) => [ ...state, { ...payload, type: "changed nick" } ],
-  [messageReceived]: (state, payload) => [ ...state, { ...payload, type: "message" } ]
+  [messageReceived]: (state, { msg, ...payload }) => {
+    // attempt to fold messages, apparently breaks because home is IP-based
+    /*let [lastMsg] = state.slice(-1)
+    let stateInit = state.slice(0, -1)
+    return lastMsg.type === "message" && payload.home === lastMsg.home ?
+      [ ...stateInit, { ...lastMsg, msg: [ ...lastMsg.msg, msg ] } ] :
+      [ ...state, { ...payload, msg: [msg], type: "message" } ]*/
+    return [ ...state, { ...payload, msg: [msg], type: "message" } ]
+  }
 }, [])
 
 const user = createReducer({

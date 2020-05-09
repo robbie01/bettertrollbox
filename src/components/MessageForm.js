@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
-import { connect } from "react-redux"
+import { useDispatch } from "react-redux"
 import { sendMessage } from "../actions"
 
 const MessageFormContainer = styled.form`
@@ -60,7 +60,9 @@ const MessageFormTextarea = styled.textarea`
   }
 `
 
-const MessageForm = ({ onSubmit }) => {
+const MessageForm = () => {
+  const dispatch = useDispatch()
+  const onSubmit = msg => dispatch(sendMessage(msg))
   const [input, setInput] = useState("")
   const inputEl = useRef(null)
   
@@ -95,8 +97,4 @@ const MessageForm = ({ onSubmit }) => {
   )
 }
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: msg => dispatch(sendMessage(msg))
-})
-
-export default connect(() => ({}), mapDispatchToProps)(MessageForm)
+export default MessageForm

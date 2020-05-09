@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from "redux"
-import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction"
-import { BehaviorSubject } from "rxjs"
+import { composeWithDevTools } from "redux-devtools-extension"
 import { createEpicMiddleware } from "redux-observable"
 import io from "socket.io-client"
 import rootReducer from "./reducers"
@@ -14,10 +13,9 @@ const configureStore = () => {
     // nothing
   }
 
-  const sock$ = new BehaviorSubject(null)
   const epicMiddleware = createEpicMiddleware({
-    dependencies: { io, sock$, localStorage,
-      defaultServer: "ws://darkok.xyz:8082" }
+    dependencies: { io, localStorage,
+      defaultServer: localStorage.getItem("server") || "ws://darkok.xyz:8042" }
   })
 
   const composeEnhancers = composeWithDevTools({})

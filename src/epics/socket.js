@@ -4,7 +4,7 @@ import {
   ignoreElements, pluck, distinctUntilChanged,
   finalize, mapTo
 } from "rxjs/operators"
-import { combineEpics, ofType } from "redux-observable"
+import { ofType } from "redux-observable"
 import {
   updateUsers,
   clearChatState,
@@ -16,7 +16,39 @@ import {
   connectSocket
 } from "../actions"
 
-const socketConnectEpic = (action$, state$, { io, sock$, defaultServer }) =>
+const socketReceiveEpic = (action$, state$, sock) =>
+  merge(
+    fromEvent(sock, "update users").pipe(
+      map(users => updateUsers(users))),
+    fromEvent(sock, "user joined").pipe(
+      map(user => userJoined(user))),
+    fromEvent(sock, "user left").pipe(
+      filter(user => "nick" in user),
+      map(user => userLeft(user))),
+    fromEvent(sock, "user change nick",
+      (oldUser, newUser) => ({ oldUser, newUser })
+    ).pipe(
+      map(({ oldUser, newUser }) => userChangedNick(oldUser, newUser))),
+    fromEvent(sock, "message").pipe(
+      map(msg => messageReceived(msg)))
+  ).pipe(
+    startWith(clearChatState()))
+
+const socketUserEpic = (action$, state$, sock) =>
+  state$.pipe(
+    pluck("user"),
+    distinctUntilChanged((p, q) => p.nick === q.nick && p.color === q.color),
+    tap(({ nick, color }) => sock.emit("user joined", nick, color)),
+    ignoreElements())
+
+const socketMessageEpic = (action$, state$, sock) =>
+  action$.pipe(
+    ofType(sendMessage.getType()),
+    pluck("payload"),
+    tap(msg => sock.emit("message", msg)),
+    ignoreElements())
+
+const socketEpic = (action$, state$, { io, defaultServer }) =>
   action$.pipe(
     ofType(connectSocket.getType()),
     pluck("payload"),
@@ -27,53 +59,12 @@ const socketConnectEpic = (action$, state$, { io, sock$, defaultServer }) =>
         fromEvent(sock, "disconnect").pipe(mapTo(null))
       ).pipe(
         startWith(null),
-        finalize(() => sock.close()))
-    ),
-    tap(sock$),
-    ignoreElements(),
+        finalize(() => sock.close()))),
+    switchMap(sock => sock == null ? EMPTY :
+      merge(
+        socketReceiveEpic(action$, state$, sock),
+        socketUserEpic(action$, state$, sock),
+        socketMessageEpic(action$, state$, sock))),
     startWith(connectSocket(defaultServer)))
 
-const socketReceiveEpic = (action$, state$, { sock$ }) =>
-  sock$.pipe(
-    switchMap(sock => sock == null ? EMPTY : 
-      merge(
-        fromEvent(sock, "update users").pipe(
-          map(users => updateUsers(users))),
-        fromEvent(sock, "user joined").pipe(
-          map(user => userJoined(user))),
-        fromEvent(sock, "user left").pipe(
-          filter(user => "nick" in user),
-          map(user => userLeft(user))),
-        fromEvent(sock, "user change nick",
-          (oldUser, newUser) => ({ oldUser, newUser })
-        ).pipe(
-          map(({ oldUser, newUser }) => userChangedNick(oldUser, newUser))),
-        fromEvent(sock, "message").pipe(
-          map(msg => messageReceived(msg)))
-      ).pipe(
-        startWith(clearChatState()))
-    ))
-
-const socketUserEpic = (action$, state$, { sock$ }) =>
-  sock$.pipe(
-    switchMap(sock => sock == null ? EMPTY :
-      state$.pipe(
-        pluck("user"),
-        distinctUntilChanged((p, q) => p.nick === q.nick && p.color === q.color),
-        tap(({ nick, color }) => sock.emit("user joined", nick, color)),
-        ignoreElements())))
-
-const socketMessageEpic = (action$, state$, { sock$ }) =>
-  sock$.pipe(
-    switchMap(sock => sock == null ? EMPTY :
-      action$.pipe(
-        ofType(sendMessage.getType()),
-        pluck("payload"),
-        tap(msg => sock.emit("message", msg)),
-        ignoreElements())))
-
-export default combineEpics(
-  socketConnectEpic,
-  socketReceiveEpic,
-  socketUserEpic,
-  socketMessageEpic)
+export default socketEpic
